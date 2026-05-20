@@ -18,12 +18,10 @@ export default function Home() {
         
         <div className="welcome-card liquid-glass">
           
-          {/* Anillos de agua concéntricos suaves detrás del logo */}
-          <div className="logo-container atmospheric-halo">
-            <div className="ripple ripple-1"></div>
-            <div className="ripple ripple-2"></div>
+          {/* Contenedor del Logo con brillo corporativo */}
+          <div className="logo-container logo-layout">
             <img 
-              src="/logo-inamhi.png" 
+              src="/logo.png" 
               alt="INAMHI Logo" 
               className="inamhi-logo-liquid" 
             />

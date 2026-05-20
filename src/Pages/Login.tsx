@@ -49,8 +49,7 @@ export default function Login() {
             <span>Volver</span>
           </button>
 
-          <div className="logo-container atmospheric-halo">
-            <div className="ripple ripple-1"></div>
+          <div className="logo-container logo-layout">
             <img 
               src="/logo-inamhi.png" 
               alt="INAMHI Logo" 

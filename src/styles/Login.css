@@ -90,19 +90,24 @@
   height: 14px;
 }
 
-/* Halo y Logo más pequeños para dejar espacio al formulario */
-.logo-container.atmospheric-halo {
+/* Contenedor del Logo con brillo corporativo */
+.logo-container.logo-layout {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 100%;
   margin: 0 auto 20px auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 90px;
 }
-.ripple { position: absolute; border-radius: 50%; border: 1px solid rgba(0, 210, 255, 0.4); animation: expandRipple 4s infinite linear; }
-.ripple-1 { width: 100%; height: 100%; }
-.inamhi-logo-liquid { max-width: 80px; z-index: 5; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)); }
+
+.inamhi-logo-liquid {
+  width: 260px;
+  max-width: 100%;
+  height: auto;
+  z-index: 5;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
 
 /* Títulos del Login */
 .login-title {
@@ -279,13 +284,14 @@
   }
 
   .logo-container.atmospheric-halo {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     margin-bottom: 15px;
   }
 
   .inamhi-logo-liquid {
-    max-width: 65px;
+    width: 160px;
+    max-width: none;
   }
 
   .login-title {
