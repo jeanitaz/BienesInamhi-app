@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
-import FondoClaro from '../components/FondoViento';
+import FondoBurbujas from '../components/FondoBurbujas';
 import '../styles/Login.css';
 
 export default function Login() {
@@ -54,7 +54,7 @@ export default function Login() {
         </>
       ) : (
         <>
-          <FondoClaro />
+          <FondoBurbujas />
           <div className="ambient-light light-1-clear"></div>
           <div className="ambient-light light-2-clear"></div>
         </>
