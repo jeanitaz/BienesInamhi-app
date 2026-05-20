@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas'; // Tu fondo animado elegido
 import '../styles/Home.css';
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <div className="home-container liquid-theme">
       {/* Fondo de partículas */}
@@ -35,7 +38,7 @@ export default function Home() {
             activos institucionales.
           </p>
 
-          <button className="btn-ingresar btn-liquid">
+          <button className="btn-ingresar btn-liquid" onClick={() => navigate('/login')}>
             Ingresar al Sistema
           </button>
 

@@ -169,3 +169,57 @@
   0% { transform: translate(0, 0); }
   100% { transform: translate(50px, -30px); }
 }
+
+/* --- MEDIA QUERIES PARA ADAPTABILIDAD EN CELULARES --- */
+@media (max-width: 576px) {
+  .welcome-card.liquid-glass {
+    padding: 40px 24px 30px 24px;
+    border-radius: 25px;
+  }
+  
+  .atmospheric-halo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+  }
+  
+  .inamhi-logo-liquid {
+    max-width: 85px;
+  }
+  
+  .fluid-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  .liquid-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+  }
+  
+  /* Hacemos que los saltos de línea forzados se ignoren en pantallas pequeñas */
+  .liquid-subtitle br {
+    display: none;
+  }
+  
+  .btn-liquid {
+    padding: 15px 30px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  .ambient-light {
+    filter: blur(60px);
+    opacity: 0.3;
+  }
+  
+  .light-1 {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .light-2 {
+    width: 250px;
+    height: 250px;
+  }
+}
