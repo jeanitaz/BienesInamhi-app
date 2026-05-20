@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&display=swap');
+
+:root {
+  --aqua-primary: #00d2ff;
+  --blue-deep: #0a4275;
+  --white-soft: rgba(255, 255, 255, 0.85);
+}
+
+/* Fondo oscuro marino/atmosférico */
+.home-container.liquid-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  background-color: #030b14;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Luces ambientales desenfocadas detrás de la tarjeta */
+.ambient-light {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 1;
+  opacity: 0.5;
+  animation: floatLight 10s infinite alternate ease-in-out;
+}
+
+.light-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--aqua-primary);
+  top: 10%;
+  left: 25%;
+}
+
+.light-2 {
+  width: 500px;
+  height: 500px;
+  background: #3a7bd5;
+  bottom: 5%;
+  right: 20%;
+  animation-delay: -5s;
+}
+
+.centered-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Tarjeta: Cristal ultra limpio (Liquid Glass) */
+.welcome-card.liquid-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 35px; /* Curvas más suaves y orgánicas */
+  padding: 60px 50px 45px 50px;
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: transform 0.4s ease;
+}
+
+.welcome-card.liquid-glass:hover {
+  transform: translateY(-5px);
+}
+
+/* Halo atmosférico / Ondas de agua para el logo */
+.atmospheric-halo {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 30px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 210, 255, 0.4);
+  animation: expandRipple 4s infinite linear;
+}
+
+.ripple-1 { width: 100%; height: 100%; animation-delay: 0s; }
+.ripple-2 { width: 100%; height: 100%; animation-delay: -2s; }
+
+.inamhi-logo-liquid {
+  max-width: 110px;
+  z-index: 5;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+/* Textos Fluidos */
+.fluid-title {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 15px 0;
+  letter-spacing: -0.5px;
+}
+
+/* Gradiente de agua para la palabra BIENES */
+.text-gradient-aqua {
+  background: linear-gradient(to right, #00d2ff, #3a7bd5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.liquid-subtitle {
+  color: var(--white-soft);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-weight: 300;
+  margin: 0 0 40px 0;
+}
+
+/* Botón con efecto líquido/onda */
+.btn-liquid {
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  color: #ffffff;
+  border: none;
+  padding: 18px 40px;
+  width: 90%;
+  border-radius: 50px; /* Píldora perfecta */
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 210, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.btn-liquid:hover {
+  background: linear-gradient(135deg, #4489eb, #1de3ff);
+  box-shadow: 0 15px 35px rgba(0, 210, 255, 0.5);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.liquid-footer {
+  margin-top: 45px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+}
+
+/* Animaciones suaves */
+@keyframes expandRipple {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes floatLight {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, -30px); }
+}
