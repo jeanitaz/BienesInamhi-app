@@ -30,7 +30,7 @@ const FondoEstrellas = () => {
           events: {
             onHover: {
               enable: true,
-              mode: "bubble", // Las estrellas se iluminan/agrandan levemente al pasar el mouse
+              mode: "bubble", // Las estrellas se iluminan se agrandan levemente al pasar el mouse
             },
             onClick: {
               enable: true,

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoClaro from '../components/FondoViento';
 import '../styles/Admin.css';
@@ -7,8 +7,13 @@ export default function Admin() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  useEffect(() => {
+    localStorage.setItem('userRole', 'tecnico');
+  }, []);
+
   return (
     <div className="admin-layout light-theme">
+      {/* Fondo de líneas animadas sutiles en tono claro */}
       <FondoClaro />
 
       {/* Overlay para móviles */}
@@ -25,10 +30,10 @@ export default function Admin() {
         </div>
         <nav className="sidebar-nav">
           <button className="nav-item active">Dashboard</button>
-          <button className="nav-item" onClick={() => navigate('/pantalla-general')}>Inventario de Bienes</button>
+          <button className="nav-item" onClick={() => navigate('/inventario')}>Inventario de Bienes</button>
           <button className="nav-item">Ingresos / Salidas</button>
           <button className="nav-item">Reportes</button>
-          <button className="nav-item" onClick={() => navigate('/crear-usuario')}>Usuarios</button>
+          <button className="nav-item" onClick={() => navigate('/creacion-usuarios')}>Usuarios</button>
         </nav>
         <div className="sidebar-footer">
           <div className="admin-profile">
@@ -79,7 +84,7 @@ export default function Admin() {
           <div className="table-container solid-panel">
             <div className="table-header">
               <h3>Últimos Bienes Registrados</h3>
-              <button className="btn-action">+ Nuevo Registro</button>
+              <button className="btn-action" onClick={() => navigate('/registro-bien')}>+ Nuevo Registro</button>
             </div>
             <table className="bienes-table">
               <thead>

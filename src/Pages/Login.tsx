@@ -31,6 +31,7 @@ export default function Login() {
     e.preventDefault();
     setIngresando(true);
     console.log(`Iniciando sesión como ${tipoAcceso}:`, credenciales);
+    localStorage.setItem('userRole', tipoAcceso);
 
     // Simulación de acceso e ingreso
     setTimeout(() => {

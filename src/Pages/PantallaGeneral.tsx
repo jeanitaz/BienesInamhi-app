@@ -18,7 +18,9 @@ export default function PantallaGeneral() {
   const [filtroEstado, setFiltroEstado] = useState<string>('todos');
   const [notificacion, setNotificacion] = useState<{ tipo: 'excel' | 'pdf'; mensaje: string } | null>(null);
 
-  // Datos mock realistas basados en bienes institucionales de INAMHI
+  // Obtener el rol del usuario (por defecto 'consultor' si no está definido)
+  const [role] = useState(() => localStorage.getItem('userRole') || 'consultor');
+
   const [bienes, setBienes] = useState<Bien[]>([
     {
       codigoEsbye: 'ESBYE-2026-041',
@@ -138,12 +140,21 @@ export default function PantallaGeneral() {
         {/* Encabezado Principal */}
         <header className="pantalla-header solid-panel">
           <div className="header-left">
-            <button className="btn-back-dashboard" onClick={() => navigate('/admin')} aria-label="Volver a Dashboard">
+            <button 
+              className="btn-back-dashboard" 
+              onClick={() => navigate(role === 'tecnico' ? '/admin' : '/login')} 
+              aria-label={role === 'tecnico' ? 'Volver a Dashboard' : 'Cerrar Sesión'}
+              title={role === 'tecnico' ? 'Volver a Dashboard' : 'Cerrar Sesión'}
+            >
               ←
             </button>
             <div className="header-titles">
               <h1>Inventario de Bienes</h1>
-              <p>Consulta general, filtrado y auditoría de activos institucionales</p>
+              <p>
+                {role === 'tecnico' 
+                  ? 'Consulta general, filtrado y auditoría de activos institucionales (Acceso Técnico)' 
+                  : 'Consulta general y descarga de reportes autorizados (Acceso Consultor)'}
+              </p>
             </div>
           </div>
           <div className="header-right">
@@ -171,10 +182,12 @@ export default function PantallaGeneral() {
               )}
             </div>
 
-            {/* Nuevo Registro */}
-            <button className="btn-action btn-new-register" onClick={() => navigate('/admin')}>
-              <span className="plus-icon">+</span> Nuevo Registro
-            </button>
+            {/* Nuevo Registro (Solo visible para técnicos) */}
+            {role === 'tecnico' && (
+              <button className="btn-action btn-new-register" onClick={() => navigate('/registro-bien')}>
+                <span className="plus-icon">+</span> Nuevo Registro
+              </button>
+            )}
           </div>
 
           <div className="control-filter-export-row">
@@ -239,7 +252,7 @@ export default function PantallaGeneral() {
                   <th>Custodio</th>
                   <th>Ubicación</th>
                   <th>Estado</th>
-                  <th className="text-center">Acciones</th>
+                  {role === 'tecnico' && <th className="text-center">Acciones</th>}
                 </tr>
               </thead>
               <tbody>
@@ -258,29 +271,31 @@ export default function PantallaGeneral() {
                           {bien.estado === 'baja' && '● Baja / Dañado'}
                         </span>
                       </td>
-                      <td className="text-center">
-                        <div className="action-buttons-cell">
-                          <button
-                            className="btn-table-action btn-edit-asset"
-                            onClick={() => alert(`Editando bien ${bien.codigoEsbye}`)}
-                            title="Editar registro"
-                          >
-                            ✏️
-                          </button>
-                          <button
-                            className="btn-table-action btn-delete-asset"
-                            onClick={() => eliminarBien(bien.codigoEsbye)}
-                            title="Dar de baja bien"
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </td>
+                      {role === 'tecnico' && (
+                        <td className="text-center">
+                          <div className="action-buttons-cell">
+                            <button
+                              className="btn-table-action btn-edit-asset"
+                              onClick={() => alert(`Editando bien ${bien.codigoEsbye}`)}
+                              title="Editar registro"
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              className="btn-table-action btn-delete-asset"
+                              onClick={() => eliminarBien(bien.codigoEsbye)}
+                              title="Dar de baja bien"
+                            >
+                              🗑️
+                            </button>
+                          </div>
+                        </td>
+                      )}
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="no-data-cell">
+                    <td colSpan={role === 'tecnico' ? 7 : 6} className="no-data-cell">
                       <div className="no-data-wrapper">
                         <span className="no-data-icon">🔍</span>
                         <p className="no-data-text">No se encontraron bienes que coincidan con la búsqueda o filtro.</p>

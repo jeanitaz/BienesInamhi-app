@@ -1,0 +1,375 @@
+/* --- HOJA DE ESTILOS PREMIUM PARA REGISTRO DE BIENES --- */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap');
+
+.registro-bien-container.liquid-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 40px 20px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #030b14;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tarjeta del Formulario */
+.registro-bien-card.liquid-glass {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 35px;
+  padding: 50px 40px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  margin: 20px auto;
+}
+
+/* Botón Volver */
+.btn-back-general {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 8px 16px;
+  border-radius: 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.btn-back-general:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #00d2ff;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+  transform: translateX(-3px);
+}
+
+/* Títulos y Subtítulos */
+.registro-bien-card .card-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 5px 0;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.registro-bien-card .card-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 0 0 40px 0;
+}
+
+/* Subtítulos de Sección */
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #00d2ff;
+  margin: 30px 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 210, 255, 0.15);
+  text-align: left;
+  letter-spacing: 0.5px;
+}
+
+/* --- GRIDS DE FORMULARIO --- */
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-grid-three {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.col-span-2 {
+  grid-column: span 2;
+}
+
+/* Estilo de Contenedores de Input */
+.registro-bien-card .input-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.registro-bien-card .input-group label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  padding-left: 3px;
+}
+
+/* Fila especial para Label + Checkbox Marcador */
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.label-row label {
+  margin-bottom: 0 !important;
+}
+
+/* Checkbox marcador (No tiene) */
+.checkbox-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-marker input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkbox-marker input[type="checkbox"]:checked {
+  background: #00d2ff;
+  border-color: #00d2ff;
+}
+
+.checkbox-marker span {
+  font-size: 0.8rem !important;
+  color: #00d2ff !important;
+  font-weight: 700 !important;
+}
+
+/* Estilos de Inputs, Selects y Textareas */
+.registro-bien-card .input-group input,
+.registro-bien-card .input-group select,
+.registro-bien-card .input-group textarea {
+  font-family: 'Outfit', sans-serif;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Estilos específicos de los select (desplegables) */
+.registro-bien-card .input-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.registro-bien-card .input-group select option {
+  background-color: #071322;
+  color: #ffffff;
+  padding: 10px;
+}
+
+.registro-bien-card .input-group input::placeholder,
+.registro-bien-card .input-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Foco en inputs */
+.registro-bien-card .input-group input:focus:not(:disabled),
+.registro-bien-card .input-group select:focus:not(:disabled),
+.registro-bien-card .input-group textarea:focus:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #00d2ff;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.25);
+}
+
+/* Deshabilitados */
+.registro-bien-card .input-group input:disabled,
+.registro-bien-card .input-group select:disabled,
+.registro-bien-card .input-group textarea:disabled {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+
+/* Asistentes de Formato */
+.format-helper {
+  font-size: 0.75rem;
+  margin-top: 5px;
+  font-weight: 500;
+  display: block;
+  text-align: left;
+}
+.text-success { color: #00e676; }
+.text-danger { color: #ff5252; }
+
+/* --- GRID DE ESTADOS CARD BADGES --- */
+.estados-badge-grid {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.estado-badge-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  user-select: none;
+}
+
+.estado-dot {
+  font-size: 0.8rem;
+}
+
+.estado-badge-card .estado-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Estados Inactivos Hover */
+.estado-badge-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Estados Activos */
+.estado-badge-card.bueno.active {
+  background: rgba(0, 230, 118, 0.1);
+  border-color: #00e676;
+  color: #00e676;
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.2);
+}
+
+.estado-badge-card.regular.active {
+  background: rgba(255, 145, 0, 0.1);
+  border-color: #ff9100;
+  color: #ff9100;
+  box-shadow: 0 0 15px rgba(255, 145, 0, 0.2);
+}
+
+.estado-badge-card.malo.active {
+  background: rgba(255, 23, 68, 0.1);
+  border-color: #ff1744;
+  color: #ff1744;
+  box-shadow: 0 0 15px rgba(255, 23, 68, 0.2);
+}
+
+/* --- BOTONES DE ACCIONES FORMULARIO --- */
+.registro-bien-card .form-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 30px;
+}
+
+.btn-cancel {
+  font-family: 'Outfit', sans-serif;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.btn-submit.btn-liquid {
+  margin-top: 0 !important;
+  padding: 14px 35px;
+  font-size: 1rem;
+}
+
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- RESPONSIVIDAD --- */
+@media (max-width: 768px) {
+  .form-grid-three {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .col-span-2 {
+    grid-column: span 1;
+  }
+  
+  .registro-bien-card.liquid-glass {
+    padding: 35px 20px;
+    border-radius: 25px;
+  }
+  
+  .btn-back-general {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin-bottom: 20px;
+    display: inline-flex;
+  }
+  
+  .registro-bien-card .card-title {
+    font-size: 1.8rem;
+  }
+  
+  .estados-badge-grid {
+    flex-direction: column;
+  }
+  
+  .registro-bien-card .form-actions-row {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+  
+  .btn-cancel, .btn-submit.btn-liquid {
+    width: 100%;
+    padding: 12px;
+  }
+}
