@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
-import FondoBurbujas from '../components/FondoBurbujas';
+import FondoEstrellas from '../components/FondoEstrellas';
 import '../styles/Login.css';
 
 export default function Login() {
@@ -44,7 +44,7 @@ export default function Login() {
   };
 
   return (
-    <div className={`login-container ${tipoAcceso === 'tecnico' ? 'liquid-theme' : 'light-theme'}`}>
+    <div className={`login-container ${tipoAcceso === 'tecnico' ? 'liquid-theme' : 'consultor-theme'}`}>
       {/* Fondo y luces dinámicas según el rol */}
       {tipoAcceso === 'tecnico' ? (
         <>
@@ -54,9 +54,9 @@ export default function Login() {
         </>
       ) : (
         <>
-          <FondoBurbujas />
-          <div className="ambient-light light-1-clear"></div>
-          <div className="ambient-light light-2-clear"></div>
+          <FondoEstrellas />
+          <div className="ambient-light light-1-consultor"></div>
+          <div className="ambient-light light-2-consultor"></div>
         </>
       )}
 

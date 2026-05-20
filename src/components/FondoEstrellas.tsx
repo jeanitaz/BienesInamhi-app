@@ -3,7 +3,7 @@ import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import type { Engine } from "tsparticles-engine";
 
-const FondoBurbujas = () => {
+const FondoEstrellas = () => {
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadFull(engine);
   }, []);
@@ -30,21 +30,21 @@ const FondoBurbujas = () => {
           events: {
             onHover: {
               enable: true,
-              mode: "bubble", // Infla las burbujas bajo el mouse
+              mode: "bubble", // Las estrellas se iluminan/agrandan levemente al pasar el mouse
             },
             onClick: {
               enable: true,
-              mode: "push", // Genera más burbujas al hacer clic
+              mode: "push", // Genera algunas chispas más
             },
             resize: true,
           },
           modes: {
             bubble: {
-              distance: 180,
-              size: 14,
-              opacity: 0.9,
+              distance: 150,
+              size: 4,
+              opacity: 1,
               duration: 2,
-              color: "#00d2ff" // Brillo cian en el cursor
+              color: "#ffb74d", // Destello dorado
             },
             push: {
               quantity: 4,
@@ -53,22 +53,22 @@ const FondoBurbujas = () => {
         },
         particles: {
           color: {
-            value: ["#ffffff", "#e0f7fa", "#80deea", "#e1f5fe"], // Blanco y celestes translúcidos
+            value: ["#ffffff", "#ffb74d", "#e1bee7", "#bc13fe", "#ffd54f"], // Blanco, oro, lavanda, violeta
           },
           links: {
-            enable: false, // COMPLETAMENTE LIMPIO: Sin líneas ni mallas
+            enable: false, // Sin líneas de conexión, es polvo estelar libre
           },
           collisions: {
-            enable: false, // Se cruzan con elegancia
+            enable: false,
           },
           move: {
-            direction: "none",
+            direction: "bottom-left", // Flujo diagonal descendente muy lento
             enable: true,
             outModes: {
-              default: "out", // Salen por los bordes y reaparecen orgánicamente
+              default: "out",
             },
             random: true,
-            speed: 0.8, // Movimiento muy calmado e hipnótico
+            speed: 0.3, // Movimiento sumamente pacífico y lento
             straight: false,
           },
           number: {
@@ -76,25 +76,33 @@ const FondoBurbujas = () => {
               enable: true,
               area: 800,
             },
-            value: 65, // Densidad balanceada para no saturar la pantalla
+            value: 100, // Una densidad agradable para simular una constelación
           },
           opacity: {
-            value: { min: 0.15, max: 0.7 },
+            value: { min: 0.2, max: 0.8 },
             animation: {
               enable: true,
-              speed: 0.8,
+              speed: 0.5,
               minimumValue: 0.1,
             },
           },
           shape: {
-            type: "circle", // Círculos puros / Burbujas de luz
+            type: "circle",
           },
           size: {
-            value: { min: 3, max: 9 }, // Tamaños variados para profundidad 3D
+            value: { min: 1, max: 3 }, // Estrellas diminutas para dar profundidad
             animation: {
               enable: true,
-              speed: 2,
-              minimumValue: 1,
+              speed: 1,
+              minimumValue: 0.5,
+            },
+          },
+          twinkle: {
+            particles: {
+              enable: true, // Efecto de parpadeo realista
+              color: "#ffffff",
+              frequency: 0.08,
+              opacity: 1,
             },
           },
         },
@@ -104,4 +112,4 @@ const FondoBurbujas = () => {
   );
 };
 
-export default FondoBurbujas;
+export default FondoEstrellas;

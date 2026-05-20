@@ -392,110 +392,161 @@
   gap: 8px;
 }
 
-/* --- ESTILOS COMPATIBLES CON TEMA CLARO (CONSULTOR) --- */
-.login-container.light-theme {
-  background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 50%, #e0f2f1 100%);
+/* --- ESTILOS COMPATIBLES CON TEMA OSCURO CÓSMICO (CONSULTOR) --- */
+.login-container.consultor-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #020208 0%, #080d21 50%, #12061e 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Luces para tema claro */
-.light-1-clear { width: 450px; height: 450px; background: rgba(0, 210, 255, 0.15); top: 10%; left: 20%; filter: blur(120px); opacity: 0.65; position: absolute; z-index: 1; }
-.light-2-clear { width: 500px; height: 500px; background: rgba(58, 123, 213, 0.12); bottom: 5%; right: 15%; filter: blur(140px); opacity: 0.65; position: absolute; z-index: 1; }
-
-/* Tarjeta en tema claro */
-.light-theme .login-card.liquid-glass {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 30px 60px rgba(10, 66, 117, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+/* Luces para tema cósmico */
+.light-1-consultor {
+  width: 450px;
+  height: 450px;
+  background: rgba(255, 183, 77, 0.15); /* Halo oro cálido */
+  top: 15%;
+  left: 20%;
+  filter: blur(120px);
+  opacity: 0.55;
+  position: absolute;
+  z-index: 1;
+  animation: floatLight 12s infinite alternate ease-in-out;
 }
 
-/* Títulos y textos en tema claro */
-.light-theme .login-title {
-  color: var(--blue-deep);
+.light-2-consultor {
+  width: 500px;
+  height: 500px;
+  background: rgba(188, 19, 254, 0.14); /* Halo violeta neón */
+  bottom: 8%;
+  right: 15%;
+  filter: blur(140px);
+  opacity: 0.55;
+  position: absolute;
+  z-index: 1;
+  animation: floatLight 10s infinite alternate ease-in-out -5s;
 }
-.light-theme .login-subtitle {
-  color: var(--grey-text);
+
+/* Tarjeta en tema cósmico */
+.consultor-theme .login-card.liquid-glass {
+  background: linear-gradient(135deg, rgba(18, 6, 30, 0.45) 0%, rgba(2, 2, 8, 0.75) 100%);
+  border: 1px solid rgba(188, 19, 254, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
+              0 0 30px rgba(188, 19, 254, 0.15), 
+              0 0 15px rgba(255, 183, 77, 0.08), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Títulos y textos en tema cósmico */
+.consultor-theme .text-gradient-aqua {
+  background: linear-gradient(to right, #bc13fe, #ffb74d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.consultor-theme .login-subtitle {
+  color: #e1bee7;
+  font-weight: 300;
+}
+
+/* Barra de pestañas en tema cósmico */
+.consultor-theme .login-tabs-bar {
+  background: rgba(18, 6, 30, 0.3);
+  border: 1px solid rgba(188, 19, 254, 0.15);
+}
+
+.consultor-theme .login-tab-btn {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.consultor-theme .login-tab-btn:hover:not(:disabled) {
+  color: #ffb74d;
+}
+
+.consultor-theme .login-tab-btn.active {
+  background: linear-gradient(135deg, #bc13fe, #ffb74d);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(188, 19, 254, 0.3);
+}
+
+/* Botón Volver en tema cósmico */
+.consultor-theme .btn-back-home {
+  background: rgba(18, 6, 30, 0.2);
+  border: 1px solid rgba(188, 19, 254, 0.2);
+  color: #e1bee7;
+}
+
+.consultor-theme .btn-back-home:hover {
+  background: rgba(188, 19, 254, 0.15);
+  border-color: #ffb74d;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 183, 77, 0.25);
+}
+
+/* Inputs en tema cósmico */
+.consultor-theme .input-group label {
+  color: #e1bee7;
   font-weight: 500;
 }
 
-/* Barra de pestañas en tema claro */
-.light-theme .login-tabs-bar {
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.light-theme .login-tab-btn {
-  color: var(--grey-text);
-}
-
-.light-theme .login-tab-btn:hover:not(:disabled) {
-  color: var(--blue-deep);
-}
-
-.light-theme .login-tab-btn.active {
-  background: linear-gradient(135deg, #1e88e5, #00d2ff);
+.consultor-theme .input-group input {
+  background: rgba(18, 6, 30, 0.35);
+  border: 1px solid rgba(188, 19, 254, 0.25);
   color: #ffffff;
 }
 
-/* Botón Volver en tema claro */
-.light-theme .btn-back-home {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  color: var(--dark-text);
+.consultor-theme .input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
 }
 
-.light-theme .btn-back-home:hover {
-  background: rgba(0, 0, 0, 0.06);
-  border-color: var(--blue-medium);
-  color: var(--blue-deep);
-  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.1);
+.consultor-theme .input-group input:focus {
+  background: rgba(18, 6, 30, 0.55);
+  border-color: #ffb74d;
+  box-shadow: 0 0 15px rgba(255, 183, 77, 0.25);
 }
 
-/* Inputs en tema claro */
-.light-theme .input-group label {
-  color: var(--blue-deep);
-  font-weight: 600;
+/* Contraseña y enlaces en tema cósmico */
+.consultor-theme .password-toggle {
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.light-theme .input-group input {
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  color: var(--dark-text);
+.consultor-theme .password-toggle:hover {
+  color: #ffb74d;
 }
 
-.light-theme .input-group input::placeholder {
-  color: #a0aec0;
+.consultor-theme .forgot-password {
+  color: #ffb74d;
 }
 
-.light-theme .input-group input:focus {
-  background: #ffffff;
-  border-color: var(--blue-medium);
-  box-shadow: 0 0 12px rgba(30, 136, 229, 0.15);
+.consultor-theme .forgot-password:hover {
+  color: #e1bee7;
 }
 
-/* Contraseña y enlaces en tema claro */
-.light-theme .password-toggle {
-  color: var(--grey-text);
+/* Botón de envío en tema cósmico */
+.consultor-theme .btn-login {
+  background: linear-gradient(135deg, #bc13fe, #ffb74d);
+  box-shadow: 0 10px 25px rgba(188, 19, 254, 0.25);
 }
 
-.light-theme .password-toggle:hover {
-  color: var(--blue-medium);
-}
-
-.light-theme .forgot-password {
-  color: var(--blue-medium);
-}
-
-.light-theme .forgot-password:hover {
-  color: var(--blue-deep);
+.consultor-theme .btn-login:hover {
+  background: linear-gradient(135deg, #c737ff, #ffc570);
+  box-shadow: 0 15px 35px rgba(255, 183, 77, 0.4);
 }
 
 @media (max-width: 576px) {
-  .login-tabs-bar {
+  .consultor-theme .login-tabs-bar {
     max-width: 100%;
     margin-bottom: 20px;
   }
   
-  .login-tab-btn {
+  .consultor-theme .login-tab-btn {
     padding: 8px 12px;
     font-size: 0.8rem;
   }
