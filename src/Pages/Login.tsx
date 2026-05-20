@@ -13,6 +13,7 @@ export default function Login() {
   });
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [ingresando, setIngresando] = useState(false);
+  const [notificacionToast, setNotificacionToast] = useState<string | null>(null);
 
   const manejarCambio = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,13 +28,67 @@ export default function Login() {
     setCredenciales({ usuario: '', password: '' });
   };
 
+  const manejarOlvidoPassword = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (!credenciales.usuario.trim()) {
+      alert("Por favor, ingresa tu usuario en el campo de texto antes de solicitar el restablecimiento.");
+      return;
+    }
+
+    const usuarioSol = credenciales.usuario.trim();
+    const solicitudesPrevias = JSON.parse(localStorage.getItem('solicitudesReset') || '[]');
+    
+    // Evitar duplicidades de solicitudes pendientes
+    const existe = solicitudesPrevias.some((sol: any) => sol.usuario.toLowerCase() === usuarioSol.toLowerCase());
+    if (existe) {
+      setNotificacionToast(`Ya existe una solicitud pendiente de restablecimiento para el usuario "${usuarioSol}".`);
+      setTimeout(() => setNotificacionToast(null), 4000);
+      return;
+    }
+
+    const nuevaSolicitud = {
+      id: Date.now(),
+      usuario: usuarioSol,
+      rol: tipoAcceso,
+      fecha: new Date().toLocaleString()
+    };
+
+    localStorage.setItem('solicitudesReset', JSON.stringify([...solicitudesPrevias, nuevaSolicitud]));
+    setNotificacionToast(`¡Solicitud enviada! Se ha notificado al Administrador para restablecer la contraseña de "${usuarioSol}".`);
+    setTimeout(() => setNotificacionToast(null), 5000);
+  };
+
   const manejarEnvio = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIngresando(true);
+
+    const usuarioIngresado = credenciales.usuario.trim().toLowerCase();
+
+    // Validación de credenciales de Administrador quemadas
+    if (usuarioIngresado === 'admin@inamhi.gob.ec') {
+      if (credenciales.password !== 'admin') {
+        setTimeout(() => {
+          setIngresando(false);
+          setNotificacionToast("⚠️ Contraseña incorrecta para el Administrador.");
+          setTimeout(() => setNotificacionToast(null), 4000);
+        }, 600);
+        return;
+      }
+
+      // Acceso correcto como Administrador
+      localStorage.setItem('userRole', 'tecnico');
+      console.log("Iniciando sesión como Administrador (admin@inamhi.gob.ec)");
+      setTimeout(() => {
+        setIngresando(false);
+        navigate('/admin');
+      }, 1200);
+      return;
+    }
+
+    // Simulación de accesos para otros usuarios
     console.log(`Iniciando sesión como ${tipoAcceso}:`, credenciales);
     localStorage.setItem('userRole', tipoAcceso);
 
-    // Simulación de acceso e ingreso
     setTimeout(() => {
       setIngresando(false);
       if (tipoAcceso === 'tecnico') {
@@ -46,6 +101,13 @@ export default function Login() {
 
   return (
     <div className={`login-container ${tipoAcceso === 'tecnico' ? 'liquid-theme' : 'consultor-theme'}`}>
+      {/* Toast flotante para solicitudes de restablecimiento */}
+      {notificacionToast && (
+        <div className="login-toast">
+          <span className="toast-icon">🔔</span>
+          <p>{notificacionToast}</p>
+        </div>
+      )}
       {/* Fondo y luces dinámicas según el rol */}
       {tipoAcceso === 'tecnico' ? (
         <>
@@ -126,7 +188,7 @@ export default function Login() {
                 name="usuario"
                 placeholder={
                   tipoAcceso === 'tecnico'
-                    ? 'ej. tecnico.perez'
+                    ? 'ej. admin@inamhi.gob.ec o tecnico'
                     : 'ej. consultor.silva'
                 }
                 value={credenciales.usuario}
@@ -171,7 +233,7 @@ export default function Login() {
             </div>
 
             <div className="form-actions">
-              <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>
+              <a href="#" className="forgot-password" onClick={manejarOlvidoPassword}>¿Olvidaste tu contraseña?</a>
             </div>
 
             <button type="submit" className="btn-liquid btn-login" disabled={ingresando}>

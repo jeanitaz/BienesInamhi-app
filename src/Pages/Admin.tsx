@@ -7,9 +7,58 @@ export default function Admin() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const [solicitudes, setSolicitudes] = useState<any[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('solicitudesReset') || '[]');
+    } catch (e) {
+      return [];
+    }
+  });
+  const [mostrarNotif, setMostrarNotif] = useState(false);
+
   useEffect(() => {
     localStorage.setItem('userRole', 'tecnico');
   }, []);
+
+  useEffect(() => {
+    const manejarStorage = (e: StorageEvent) => {
+      if (e.key === 'solicitudesReset') {
+        try {
+          setSolicitudes(JSON.parse(e.newValue || '[]'));
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+    window.addEventListener('storage', manejarStorage);
+
+    const interval = setInterval(() => {
+      try {
+        const stored = JSON.parse(localStorage.getItem('solicitudesReset') || '[]');
+        if (JSON.stringify(stored) !== JSON.stringify(solicitudes)) {
+          setSolicitudes(stored);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }, 2000);
+
+    return () => {
+      window.removeEventListener('storage', manejarStorage);
+      clearInterval(interval);
+    };
+  }, [solicitudes]);
+
+  const manejarAtenderRestablecimiento = (id: number, usuario: string) => {
+    const confirmar = window.confirm(`¿Estás seguro de que deseas restablecer la contraseña para el usuario "${usuario}"?`);
+    if (!confirmar) return;
+
+    const filtradas = solicitudes.filter(sol => sol.id !== id);
+    localStorage.setItem('solicitudesReset', JSON.stringify(filtradas));
+    setSolicitudes(filtradas);
+
+    alert(`Contraseña de "${usuario}" restablecida con éxito.\nLa nueva contraseña provisional es: "Inamhi2026*"`);
+  };
 
   return (
     <div className="admin-layout light-theme">
@@ -43,7 +92,7 @@ export default function Admin() {
               <span className="admin-role">Gestión de Bienes</span>
             </div>
           </div>
-          <button className="btn-logout">Cerrar Sesión</button>
+          <button className="btn-logout" onClick={() => navigate('/')}>Cerrar Sesión</button>
         </div>
       </aside>
 
@@ -57,7 +106,60 @@ export default function Admin() {
           </div>
           <div className="header-actions">
             <input type="text" placeholder="Buscar código de bien..." className="search-bar" />
-            <button className="btn-notificaciones">🔔</button>
+            <div className="btn-notificaciones-wrapper">
+              <button 
+                className="btn-notificaciones" 
+                onClick={() => setMostrarNotif(!mostrarNotif)}
+                aria-label="Notificaciones"
+              >
+                🔔
+                {solicitudes.length > 0 && (
+                  <span className="notif-badge">{solicitudes.length}</span>
+                )}
+              </button>
+
+              {mostrarNotif && (
+                <div className="notif-dropdown solid-panel">
+                  <div className="notif-dropdown-header">
+                    <h4>Restablecer Contraseñas</h4>
+                    {solicitudes.length > 0 && (
+                      <span className="notif-count-label">{solicitudes.length} pendiente(s)</span>
+                    )}
+                  </div>
+                  <div className="notif-dropdown-list">
+                    {solicitudes.length === 0 ? (
+                      <div className="notif-empty-state">
+                        <span className="empty-icon">🎉</span>
+                        <p>No hay solicitudes pendientes</p>
+                      </div>
+                    ) : (
+                      solicitudes.map((sol) => (
+                        <div key={sol.id} className="notif-item">
+                          <div className="notif-item-icon">
+                            {sol.rol === 'tecnico' ? '🛠️' : '🔍'}
+                          </div>
+                          <div className="notif-item-info">
+                            <p className="notif-item-user">
+                              <strong>{sol.usuario}</strong>
+                            </p>
+                            <span className="notif-item-role">
+                              {sol.rol === 'tecnico' ? 'Técnico' : 'Consultor'}
+                            </span>
+                            <span className="notif-item-time">{sol.fecha}</span>
+                          </div>
+                          <button 
+                            className="btn-notif-atender" 
+                            onClick={() => manejarAtenderRestablecimiento(sol.id, sol.usuario)}
+                          >
+                            Atender
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
