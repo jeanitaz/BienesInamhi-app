@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import FondoNodos from '../components/FondoParticulas'; // Tu fondo animado elegido
+import FondoNodos from '../components/FondoParticulas';
 import '../styles/Home.css';
 
 export default function Home() {

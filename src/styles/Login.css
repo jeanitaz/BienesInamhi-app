@@ -340,3 +340,163 @@
   .light-1 { width: 250px; height: 250px; }
   .light-2 { width: 250px; height: 250px; }
 }
+
+/* --- BARRA DE PESTAÑAS (TABS) PARA ROL DE ACCESO --- */
+.login-tabs-bar {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 50px;
+  margin: 0 auto 25px auto;
+  width: 100%;
+  max-width: 320px;
+  gap: 4px;
+}
+
+.login-tab-btn {
+  flex: 1;
+  font-family: 'Outfit', sans-serif;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.login-tab-btn:hover:not(:disabled) {
+  color: #ffffff;
+}
+
+.login-tab-btn.active {
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 210, 255, 0.25);
+}
+
+.login-tab-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner animado */
+.login-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- ESTILOS COMPATIBLES CON TEMA CLARO (CONSULTOR) --- */
+.login-container.light-theme {
+  background-color: #f1f5f9;
+}
+
+/* Luces para tema claro */
+.light-1-clear { width: 450px; height: 450px; background: rgba(0, 210, 255, 0.25); top: 10%; left: 20%; filter: blur(100px); opacity: 0.7; position: absolute; z-index: 1; }
+.light-2-clear { width: 500px; height: 500px; background: rgba(58, 123, 213, 0.2); bottom: 5%; right: 15%; filter: blur(120px); opacity: 0.7; position: absolute; z-index: 1; }
+
+/* Tarjeta en tema claro */
+.light-theme .login-card.liquid-glass {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 30px 60px rgba(10, 66, 117, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+/* Títulos y textos en tema claro */
+.light-theme .login-title {
+  color: var(--blue-deep);
+}
+.light-theme .login-subtitle {
+  color: var(--grey-text);
+  font-weight: 500;
+}
+
+/* Barra de pestañas en tema claro */
+.light-theme .login-tabs-bar {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.light-theme .login-tab-btn {
+  color: var(--grey-text);
+}
+
+.light-theme .login-tab-btn:hover:not(:disabled) {
+  color: var(--blue-deep);
+}
+
+.light-theme .login-tab-btn.active {
+  background: linear-gradient(135deg, #1e88e5, #00d2ff);
+  color: #ffffff;
+}
+
+/* Botón Volver en tema claro */
+.light-theme .btn-back-home {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: var(--dark-text);
+}
+
+.light-theme .btn-back-home:hover {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: var(--blue-medium);
+  color: var(--blue-deep);
+  box-shadow: 0 4px 10px rgba(30, 136, 229, 0.1);
+}
+
+/* Inputs en tema claro */
+.light-theme .input-group label {
+  color: var(--blue-deep);
+  font-weight: 600;
+}
+
+.light-theme .input-group input {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: var(--dark-text);
+}
+
+.light-theme .input-group input::placeholder {
+  color: #a0aec0;
+}
+
+.light-theme .input-group input:focus {
+  background: #ffffff;
+  border-color: var(--blue-medium);
+  box-shadow: 0 0 12px rgba(30, 136, 229, 0.15);
+}
+
+/* Contraseña y enlaces en tema claro */
+.light-theme .password-toggle {
+  color: var(--grey-text);
+}
+
+.light-theme .password-toggle:hover {
+  color: var(--blue-medium);
+}
+
+.light-theme .forgot-password {
+  color: var(--blue-medium);
+}
+
+.light-theme .forgot-password:hover {
+  color: var(--blue-deep);
+}
+
+@media (max-width: 576px) {
+  .login-tabs-bar {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .login-tab-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}

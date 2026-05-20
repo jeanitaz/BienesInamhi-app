@@ -1,0 +1,659 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap');
+
+:root {
+  --aqua-primary: #00d2ff;
+  --blue-deep: #0a4275;
+  --white-soft: rgba(255, 255, 255, 0.85);
+  --success-color: #00e676;
+  --error-color: #ff5252;
+}
+
+/* Contenedor del fondo general */
+.creacion-usuarios-container.liquid-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #030b14;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Luces ambientales atmosféricas */
+.ambient-light {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 1;
+  opacity: 0.45;
+  animation: floatLight 12s infinite alternate ease-in-out;
+}
+.light-1 {
+  width: 450px;
+  height: 450px;
+  background: var(--aqua-primary);
+  top: 5%;
+  left: 15%;
+}
+.light-2 {
+  width: 500px;
+  height: 500px;
+  background: #3a7bd5;
+  bottom: 5%;
+  right: 15%;
+  animation-delay: -6s;
+}
+
+.centered-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* Tarjeta principal con cristal templado (Glassmorphic) */
+.creacion-usuarios-card.liquid-glass {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 35px;
+  padding: 60px 45px 50px 45px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  transition: transform 0.3s ease;
+}
+
+/* Botón Volver al Panel */
+.btn-back-admin {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--white-soft);
+  padding: 8px 16px;
+  border-radius: 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.btn-back-admin:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--aqua-primary);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.25);
+  transform: translateX(-3px);
+}
+
+/* Logo */
+.logo-container.logo-layout {
+  position: relative;
+  width: 100%;
+  margin: 10px auto 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inamhi-logo-liquid {
+  width: 250px;
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.95));
+}
+
+/* Títulos */
+.card-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.text-gradient-aqua {
+  background: linear-gradient(to right, #00d2ff, #3a7bd5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 0 0 35px 0;
+}
+
+/* Banner de Alertas */
+.alert-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 18px;
+  margin-bottom: 25px;
+  animation: slideDownAlert 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.alert-success {
+  background: rgba(0, 230, 118, 0.12);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  color: #a7ffeb;
+}
+
+.alert-error {
+  background: rgba(255, 82, 82, 0.12);
+  border: 1px solid rgba(255, 82, 82, 0.3);
+  color: #ffd8d8;
+}
+
+.alert-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.alert-message {
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Formulario */
+.usuarios-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.input-group label {
+  color: var(--white-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding-left: 4px;
+  letter-spacing: 0.3px;
+}
+
+/* Contenedores de entrada con iconos */
+.input-with-icon,
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 18px;
+  font-size: 1.1rem;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.input-with-icon input,
+.password-wrapper input {
+  width: 100%;
+  font-family: 'Outfit', sans-serif;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  padding: 14px 18px 14px 50px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.input-with-icon input::placeholder,
+.password-wrapper input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.input-with-icon input:focus,
+.password-wrapper input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--aqua-primary);
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.22);
+}
+
+.password-wrapper input {
+  padding-right: 50px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 18px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.password-toggle:hover {
+  color: var(--aqua-primary);
+  transform: scale(1.1);
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Selector de Roles */
+.roles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.role-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.role-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 210, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.role-card.active {
+  background: rgba(0, 210, 255, 0.08);
+  border-color: var(--aqua-primary);
+  box-shadow: 0 8px 25px rgba(0, 210, 255, 0.15);
+}
+
+.role-icon-wrapper {
+  font-size: 1.6rem;
+  background: rgba(255, 255, 255, 0.05);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.role-card.active .role-icon-wrapper {
+  background: rgba(0, 210, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.role-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.role-title {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.role-desc {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.role-radio-bullet {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.role-card.active .role-radio-bullet {
+  border-color: var(--aqua-primary);
+  background: var(--aqua-primary);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+}
+
+.role-card.active .role-radio-bullet::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #030b14;
+}
+
+/* Interruptor de Estado (Toggle Switch) */
+.toggle-group {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 16px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toggle-label-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+}
+
+.toggle-main-label {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.toggle-sub-label {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.78rem;
+}
+
+.custom-toggle-switch {
+  width: 110px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.custom-toggle-switch.activo {
+  background: rgba(0, 230, 118, 0.15);
+  border-color: rgba(0, 230, 118, 0.4);
+  box-shadow: 0 0 15px rgba(0, 230, 118, 0.1);
+  justify-content: flex-start;
+}
+
+.custom-toggle-switch.inactivo {
+  background: rgba(255, 82, 82, 0.12);
+  border-color: rgba(255, 82, 82, 0.3);
+  justify-content: flex-end;
+}
+
+.toggle-thumb {
+  width: 30px;
+  height: 30px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.35);
+  position: absolute;
+  top: 3px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.custom-toggle-switch.activo .toggle-thumb {
+  left: 4px;
+  background: var(--success-color);
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.6);
+}
+
+.custom-toggle-switch.inactivo .toggle-thumb {
+  left: 74px;
+  background: #b0bec5;
+}
+
+.toggle-text {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 0 10px;
+  pointer-events: none;
+}
+
+.custom-toggle-switch.activo .toggle-text {
+  color: #a7ffeb;
+  margin-left: 36px;
+}
+
+.custom-toggle-switch.inactivo .toggle-text {
+  color: #ffcdd2;
+  margin-right: 36px;
+}
+
+/* Fila de Acciones */
+.form-actions-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 15px;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 16px;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-liquid.btn-submit {
+  flex: 1.5;
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  color: #ffffff;
+  border: none;
+  padding: 16px;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 210, 255, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-liquid.btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #4489eb, #1de3ff);
+  box-shadow: 0 15px 35px rgba(0, 210, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-liquid.btn-submit:disabled,
+.btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Spinner cargando */
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.spinner-icon {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  font-size: 1.1rem;
+}
+
+/* Animaciones */
+@keyframes floatLight {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, -40px); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideDownAlert {
+  0% { opacity: 0; transform: translateY(-15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Adaptabilidad responsiva para pantallas pequeñas */
+@media (max-width: 576px) {
+  .centered-wrapper {
+    padding: 20px 15px;
+  }
+
+  .creacion-usuarios-card.liquid-glass {
+    padding: 55px 24px 35px 24px;
+    border-radius: 25px;
+  }
+
+  .btn-back-admin {
+    top: 15px;
+    left: 15px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .inamhi-logo-liquid {
+    width: 170px;
+  }
+
+  .card-title {
+    font-size: 1.7rem;
+  }
+
+  .card-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 25px;
+  }
+
+  .roles-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .role-card {
+    padding: 14px;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .role-icon-wrapper {
+    width: 38px;
+    height: 38px;
+    font-size: 1.3rem;
+  }
+
+  .role-radio-bullet {
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+  }
+
+  .toggle-group {
+    padding: 14px 16px;
+  }
+
+  .toggle-main-label {
+    font-size: 0.88rem;
+  }
+
+  .toggle-sub-label {
+    font-size: 0.72rem;
+  }
+
+  .custom-toggle-switch {
+    width: 95px;
+    height: 34px;
+  }
+
+  .toggle-thumb {
+    width: 26px;
+    height: 26px;
+  }
+
+  .custom-toggle-switch.activo .toggle-thumb {
+    left: 4px;
+  }
+
+  .custom-toggle-switch.inactivo .toggle-thumb {
+    left: 63px;
+  }
+
+  .custom-toggle-switch.activo .toggle-text {
+    margin-left: 28px;
+  }
+
+  .custom-toggle-switch.inactivo .toggle-text {
+    margin-right: 28px;
+  }
+
+  .form-actions-row {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .btn-cancel,
+  .btn-liquid.btn-submit {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+}

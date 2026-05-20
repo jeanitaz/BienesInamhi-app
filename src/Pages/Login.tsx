@@ -1,47 +1,74 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FondoNodos from '../components/FondoParticulas'; // Mantenemos tu fondo animado
+import FondoNodos from '../components/FondoParticulas';
+import FondoClaro from '../components/FondoViento';
 import '../styles/Login.css';
 
 export default function Login() {
   const navigate = useNavigate();
+  const [tipoAcceso, setTipoAcceso] = useState<'tecnico' | 'consultor'>('tecnico');
   const [credenciales, setCredenciales] = useState({
     usuario: '',
     password: ''
   });
   const [mostrarPassword, setMostrarPassword] = useState(false);
+  const [ingresando, setIngresando] = useState(false);
 
   const manejarCambio = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setCredenciales({
-      ...credenciales,
+    setCredenciales((prev) => ({
+      ...prev,
       [name]: value
-    });
+    }));
+  };
+
+  const cambiarAcceso = (tipo: 'tecnico' | 'consultor') => {
+    setTipoAcceso(tipo);
+    setCredenciales({ usuario: '', password: '' });
   };
 
   const manejarEnvio = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Enviando credenciales:", credenciales);
-    // Aquí irá tu lógica de autenticación (fetch/axios a tu backend)
+    setIngresando(true);
+    console.log(`Iniciando sesión como ${tipoAcceso}:`, credenciales);
+
+    // Simulación de acceso e ingreso
+    setTimeout(() => {
+      setIngresando(false);
+      if (tipoAcceso === 'tecnico') {
+        navigate('/admin');
+      } else {
+        navigate('/inventario');
+      }
+    }, 1200);
   };
 
   return (
-    <div className="login-container liquid-theme">
-      {/* Fondo de partículas y luces atmosféricas */}
-      <FondoNodos />
-      <div className="ambient-light light-1"></div>
-      <div className="ambient-light light-2"></div>
-      
+    <div className={`login-container ${tipoAcceso === 'tecnico' ? 'liquid-theme' : 'light-theme'}`}>
+      {/* Fondo y luces dinámicas según el rol */}
+      {tipoAcceso === 'tecnico' ? (
+        <>
+          <FondoNodos />
+          <div className="ambient-light light-1"></div>
+          <div className="ambient-light light-2"></div>
+        </>
+      ) : (
+        <>
+          <FondoClaro />
+          <div className="ambient-light light-1-clear"></div>
+          <div className="ambient-light light-2-clear"></div>
+        </>
+      )}
+
       <div className="login-content centered-wrapper">
-        
         <div className="login-card liquid-glass">
-          
           {/* Botón para volver al Inicio */}
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="btn-back-home"
             onClick={() => navigate('/')}
             aria-label="Volver al inicio"
+            disabled={ingresando}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -50,50 +77,83 @@ export default function Login() {
           </button>
 
           <div className="logo-container logo-layout">
-            <img 
-              src="/logo-inamhi.png" 
-              alt="INAMHI Logo" 
-              className="inamhi-logo-liquid" 
+            <img
+              src="/logo-inamhi.png"
+              alt="INAMHI Logo"
+              className="inamhi-logo-liquid"
             />
           </div>
 
           <h2 className="login-title">
             Iniciar <span className="text-gradient-aqua">Sesión</span>
           </h2>
-          <p className="login-subtitle">Ingresa tus credenciales para continuar</p>
+
+          {/* Selector de Pestañas (Tabs) de Acceso */}
+          <div className="login-tabs-bar">
+            <button
+              type="button"
+              className={`login-tab-btn ${tipoAcceso === 'tecnico' ? 'active' : ''}`}
+              onClick={() => cambiarAcceso('tecnico')}
+              disabled={ingresando}
+            >
+              🛠️ Técnico
+            </button>
+            <button
+              type="button"
+              className={`login-tab-btn ${tipoAcceso === 'consultor' ? 'active' : ''}`}
+              onClick={() => cambiarAcceso('consultor')}
+              disabled={ingresando}
+            >
+              🔍 Consultor
+            </button>
+          </div>
+
+          <p className="login-subtitle">
+            {tipoAcceso === 'tecnico'
+              ? 'Acceso Técnico - Gestión de Inventario'
+              : 'Acceso Consultor - Solo Lectura y Reportes'}
+          </p>
 
           <form onSubmit={manejarEnvio} className="login-form">
-            
             <div className="input-group">
-              <label htmlFor="usuario">Usuario / Correo</label>
-              <input 
-                type="text" 
-                id="usuario" 
-                name="usuario" 
-                placeholder="ejemplo@inamhi.gob.ec"
+              <label htmlFor="usuario">
+                {tipoAcceso === 'tecnico' ? 'Usuario Técnico' : 'Usuario Consultor'}
+              </label>
+              <input
+                type="text"
+                id="usuario"
+                name="usuario"
+                placeholder={
+                  tipoAcceso === 'tecnico'
+                    ? 'ej. tecnico.perez'
+                    : 'ej. consultor.silva'
+                }
                 value={credenciales.usuario}
                 onChange={manejarCambio}
-                required 
+                required
+                disabled={ingresando}
               />
             </div>
 
             <div className="input-group">
               <label htmlFor="password">Contraseña</label>
               <div className="password-wrapper">
-                <input 
-                  type={mostrarPassword ? "text" : "password"} 
-                  id="password" 
-                  name="password" 
+                <input
+                  type={mostrarPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
                   placeholder="••••••••"
                   value={credenciales.password}
                   onChange={manejarCambio}
-                  required 
+                  required
+                  disabled={ingresando}
                 />
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="password-toggle"
                   onClick={() => setMostrarPassword(!mostrarPassword)}
                   aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  disabled={ingresando}
                 >
                   {mostrarPassword ? (
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -113,14 +173,15 @@ export default function Login() {
               <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>
             </div>
 
-            <button type="submit" className="btn-liquid btn-login">
-              Acceder al Sistema
+            <button type="submit" className="btn-liquid btn-login" disabled={ingresando}>
+              {ingresando ? (
+                <span className="login-spinner">🔄 Ingresando...</span>
+              ) : (
+                `Acceder como ${tipoAcceso === 'tecnico' ? 'Técnico' : 'Consultor'}`
+              )}
             </button>
-
           </form>
-
         </div>
-
       </div>
     </div>
   );

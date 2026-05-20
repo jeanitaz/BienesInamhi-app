@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FondoClaro from '../components/FondoViento';
 import '../styles/Admin.css';
 
 export default function Admin() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -23,10 +25,10 @@ export default function Admin() {
         </div>
         <nav className="sidebar-nav">
           <button className="nav-item active">Dashboard</button>
-          <button className="nav-item">Inventario de Bienes</button>
+          <button className="nav-item" onClick={() => navigate('/pantalla-general')}>Inventario de Bienes</button>
           <button className="nav-item">Ingresos / Salidas</button>
           <button className="nav-item">Reportes</button>
-          <button className="nav-item">Usuarios</button>
+          <button className="nav-item" onClick={() => navigate('/crear-usuario')}>Usuarios</button>
         </nav>
         <div className="sidebar-footer">
           <div className="admin-profile">
