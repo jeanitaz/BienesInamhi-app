@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas'; // Mantenemos tu fondo animado
 import '../styles/Login.css';
@@ -11,7 +11,7 @@ export default function Login() {
   });
   const [mostrarPassword, setMostrarPassword] = useState(false);
 
-  const manejarCambio = (e) => {
+  const manejarCambio = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCredenciales({
       ...credenciales,
@@ -19,7 +19,7 @@ export default function Login() {
     });
   };
 
-  const manejarEnvio = (e) => {
+  const manejarEnvio = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Enviando credenciales:", credenciales);
     // Aquí irá tu lógica de autenticación (fetch/axios a tu backend)
