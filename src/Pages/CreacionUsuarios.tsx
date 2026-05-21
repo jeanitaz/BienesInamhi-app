@@ -160,7 +160,7 @@ export default function CreacionUsuarios() {
 
             {/* Campo: Nombre de Usuario */}
             <div className="input-group">
-              <label htmlFor="usuario">Usuario / Identificador</label>
+              <label htmlFor="usuario">Usuario</label>
               <div className="input-with-icon">
                 <span className="input-icon">🔑</span>
                 <input

@@ -14,6 +14,16 @@ export default function Admin() {
       return [];
     }
   });
+
+  const [bienes] = useState<any[]>(() => {
+    try {
+      const guardados = localStorage.getItem('bienes_inamhi');
+      return guardados ? JSON.parse(guardados) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
   const [mostrarNotif, setMostrarNotif] = useState(false);
 
   useEffect(() => {
@@ -80,8 +90,8 @@ export default function Admin() {
         <nav className="sidebar-nav">
           <button className="nav-item active">Dashboard</button>
           <button className="nav-item" onClick={() => navigate('/inventario')}>Inventario de Bienes</button>
-          <button className="nav-item">Ingresos / Salidas</button>
-          <button className="nav-item">Reportes</button>
+          <button className="nav-item" onClick={() => navigate('/analitica')}>Analítica</button>
+          <button className="nav-item" onClick={() => navigate('/lista-usuarios')}>Lista de Ususarios</button>
           <button className="nav-item" onClick={() => navigate('/creacion-usuarios')}>Usuarios</button>
         </nav>
         <div className="sidebar-footer">
@@ -165,28 +175,61 @@ export default function Admin() {
 
         <section className="admin-content">
           <div className="stats-grid">
-            <div className="stat-card solid-panel">
+            <div
+              className="stat-card solid-panel"
+              style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+              onClick={() => navigate('/inventario')}
+              title="Ver todos los bienes"
+            >
               <h4>Total de Activos</h4>
-              <p className="stat-value text-blue">2,450</p>
+              <p className="stat-value text-blue">{bienes.length.toLocaleString()}</p>
+              <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Ver inventario →</span>
             </div>
-            <div className="stat-card solid-panel">
-              <h4>Equipos Operativos</h4>
-              <p className="stat-value text-green">2,100</p>
+            <div
+              className="stat-card solid-panel"
+              style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+              onClick={() => navigate('/inventario?estado=bueno')}
+              title="Ver bienes en buen estado"
+            >
+              <h4>Estado Bueno</h4>
+              <p className="stat-value text-green">{bienes.filter(b => b.estado === 'bueno').length.toLocaleString()}</p>
+              <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Ver buenos →</span>
             </div>
-            <div className="stat-card solid-panel">
-              <h4>En Mantenimiento</h4>
-              <p className="stat-value text-orange">45</p>
+            <div
+              className="stat-card solid-panel"
+              style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+              onClick={() => navigate('/inventario?estado=regular')}
+              title="Ver bienes en estado regular"
+            >
+              <h4>Estado Regular</h4>
+              <p className="stat-value text-orange">{bienes.filter(b => b.estado === 'regular').length.toLocaleString()}</p>
+              <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Ver regulares →</span>
             </div>
-            <div className="stat-card solid-panel">
-              <h4>Bajas / Dañados</h4>
-              <p className="stat-value text-red">12</p>
+            <div
+              className="stat-card solid-panel"
+              style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+              onClick={() => navigate('/inventario?estado=malo')}
+              title="Ver bienes en mal estado"
+            >
+              <h4>Estado Malo</h4>
+              <p className="stat-value text-red">{bienes.filter(b => b.estado === 'malo').length.toLocaleString()}</p>
+              <span style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px', display: 'block' }}>Ver malos →</span>
             </div>
           </div>
 
           <div className="table-container solid-panel">
             <div className="table-header">
               <h3>Últimos Bienes Registrados</h3>
-              <button className="btn-action" onClick={() => navigate('/registro-bien')}>+ Nuevo Registro</button>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button
+                  className="btn-action"
+                  style={{ background: '#f1f5f9', color: '#0369a1', border: '1px solid #bae6fd' }}
+                  onClick={() => navigate('/inventario')}
+                >
+                  Ver todos
+                </button>
+                <button className="btn-action" onClick={() => navigate('/registro-bien')}>+ Nuevo Registro</button>
+              </div>
             </div>
             <table className="bienes-table">
               <thead>
@@ -194,32 +237,26 @@ export default function Admin() {
                   <th>Código</th>
                   <th>Descripción</th>
                   <th>Estado</th>
-                  <th>Fecha Ingreso</th>
+                  <th>Custodio</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>INV-2026-001</td>
-                  <td>Estación Meteorológica Portátil</td>
-                  <td><span className="badge badge-operativo">Operativo</span></td>
-                  <td>20/05/2026</td>
-                  <td><button className="btn-edit">Editar</button></td>
-                </tr>
-                <tr>
-                  <td>INV-2026-002</td>
-                  <td>Laptop Asus TUF Gaming F17</td>
-                  <td><span className="badge badge-mantenimiento">Mantenimiento</span></td>
-                  <td>18/05/2026</td>
-                  <td><button className="btn-edit">Editar</button></td>
-                </tr>
-                <tr>
-                  <td>INV-2026-003</td>
-                  <td>Pluviómetro Digital</td>
-                  <td><span className="badge badge-operativo">Operativo</span></td>
-                  <td>15/05/2026</td>
-                  <td><button className="btn-edit">Editar</button></td>
-                </tr>
+                {bienes.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} style={{ textAlign: 'center', padding: '20px', color: '#64748b' }}>No hay bienes registrados.</td>
+                  </tr>
+                ) : (
+                  bienes.slice(-3).reverse().map((bien, index) => (
+                    <tr key={index}>
+                      <td>{bien.codigoEsbye}</td>
+                      <td>{bien.nombreBien}</td>
+                      <td><span className={`badge badge-${bien.estado}`}>{bien.estado.charAt(0).toUpperCase() + bien.estado.slice(1)}</span></td>
+                      <td>{bien.custodio}</td>
+                      <td><button className="btn-edit" onClick={() => navigate('/inventario')}>Ver</button></td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

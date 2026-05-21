@@ -1,33 +1,73 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
 import '../styles/RegistroBien.css';
 
 export default function RegistroBien() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const bienAEditar = location.state?.bienAEditar;
+
   const [cargando, setCargando] = useState(false);
   const [alerta, setAlerta] = useState<{ tipo: 'success' | 'error'; mensaje: string } | null>(null);
 
+  // Función genérica para obtener opciones únicas
+  const getOpcionesUnicas = (campo: string, opcionesPorDefecto: string[]) => {
+    try {
+      const guardados = localStorage.getItem('bienes_inamhi');
+      if (guardados) {
+        const bienes = JSON.parse(guardados);
+        const unicos = Array.from(new Set(bienes.map((b: any) => b[campo]))) as string[];
+        const validos = unicos.filter(v => v && v !== 'Otro' && v !== 'Sin Asignar' && v !== 'S/M' && v !== 'Genérico');
+        return validos.length > 0 ? validos : opcionesPorDefecto;
+      }
+    } catch (e) {}
+    return opcionesPorDefecto;
+  };
+
+  const custodiosGuardados = getOpcionesUnicas('custodio', ['Ing. Carlos Mendoza', 'Tec. Mariana Silva']);
+  const marcasGuardadas = getOpcionesUnicas('marca', ['Campbell Scientific', 'Davis Instruments', 'RM Young', 'Lufft', 'Panasonic', 'Kipp & Zonen', 'Rotronic', 'Vaisala', 'Sutron']);
+  const modelosGuardados = getOpcionesUnicas('modelo', ['CR1000X', 'CR300', 'Vantage Pro2', 'Model 05103', 'Toughbook CF-33', 'Toughbook FZ-G2', 'HP2000', 'CMP11', 'HC2A-S', 'WXT536']);
+  const coloresGuardados = getOpcionesUnicas('color', ['Gris', 'Negro', 'Blanco', 'Azul', 'Plata', 'Amarillo', 'Naranja']);
+  const materialesGuardados = getOpcionesUnicas('material', ['Aluminio Anodizado', 'Acero Inoxidable 316', 'Plástico ABS Reforzado', 'Vidrio Borosilicato', 'Fibra de Vidrio', 'Policarbonato']);
+  const ubicacionesGuardadas = getOpcionesUnicas('ubicacion', ['Estación Iñaquito - Quito', 'Estación Izobamba', 'Estación Tababela', 'Estación Cotopaxi', 'Laboratorio de Calibración', 'Estación El Labrador', 'Bodega Central INAMHI']);
+
+  const checkCustom = (val: string | undefined, list: string[]) => val ? !list.includes(val) : false;
+
+  const esCustodioCustom = checkCustom(bienAEditar?.custodio, custodiosGuardados);
+  const esMarcaCustom = checkCustom(bienAEditar?.marca, marcasGuardadas);
+  const esModeloCustom = checkCustom(bienAEditar?.modelo, modelosGuardados);
+  const esColorCustom = checkCustom(bienAEditar?.color, coloresGuardados);
+  const esMaterialCustom = checkCustom(bienAEditar?.material, materialesGuardados);
+  const esUbicacionCustom = checkCustom(bienAEditar?.ubicacion, ubicacionesGuardadas);
+
+  const [custodioOtro, setCustodioOtro] = useState(esCustodioCustom ? bienAEditar.custodio : '');
+  const [marcaOtro, setMarcaOtro] = useState(esMarcaCustom ? bienAEditar.marca : '');
+  const [modeloOtro, setModeloOtro] = useState(esModeloCustom ? bienAEditar.modelo : '');
+  const [colorOtro, setColorOtro] = useState(esColorCustom ? bienAEditar.color : '');
+  const [materialOtro, setMaterialOtro] = useState(esMaterialCustom ? bienAEditar.material : '');
+  const [ubicacionOtro, setUbicacionOtro] = useState(esUbicacionCustom ? bienAEditar.ubicacion : '');
+
   // Estados independientes para el formulario de activos
   const [formData, setFormData] = useState({
-    nombreBien: '',
-    codigoEsbye: '',
+    nombreBien: bienAEditar?.nombreBien || '',
+    codigoEsbye: bienAEditar?.codigoEsbye || '',
     codigoAnterior: '',
     codigoProvisional: '',
-    serie: '',
-    modelo: '',
-    color: '',
+    serie: bienAEditar?.serie || '',
+    modelo: esModeloCustom ? 'Otro' : (bienAEditar?.modelo || ''),
+    color: esColorCustom ? 'Otro' : (bienAEditar?.color || ''),
     numActa: '',
-    estado: 'bueno' as 'bueno' | 'regular' | 'malo',
-    material: '',
-    ubicacion: '',
-    marca: '',
-    custodio: '',
+    estado: (bienAEditar?.estado || 'bueno') as 'bueno' | 'regular' | 'malo',
+    material: esMaterialCustom ? 'Otro' : (bienAEditar?.material || ''),
+    ubicacion: esUbicacionCustom ? 'Otro' : (bienAEditar?.ubicacion || ''),
+    marca: esMarcaCustom ? 'Otro' : (bienAEditar?.marca || ''),
+    custodio: esCustodioCustom ? 'Otro' : (bienAEditar?.custodio || ''),
     observacion: ''
   });
 
   // Marcadores de inexistencia de códigos
-  const [sinEsbye, setSinEsbye] = useState(false);
+  const [sinEsbye, setSinEsbye] = useState(bienAEditar?.codigoEsbye?.startsWith('SIN-') || false);
   const [sinAnterior, setSinAnterior] = useState(false);
   const [sinProvisional, setSinProvisional] = useState(false);
 
@@ -104,12 +144,46 @@ export default function RegistroBien() {
       codigoProvisional: sinProvisional ? 'SIN CÓDIGO' : formData.codigoProvisional
     });
 
+    // Persistir el nuevo bien en localStorage
+    const nuevoBien = {
+      codigoEsbye: sinEsbye ? (bienAEditar?.codigoEsbye || `SIN-CODIGO-${Date.now()}`) : formData.codigoEsbye.trim(),
+      nombreBien: formData.nombreBien.trim(),
+      marca: formData.marca === 'Otro' ? marcaOtro.trim() : formData.marca.trim() || 'Genérico',
+      modelo: formData.modelo === 'Otro' ? modeloOtro.trim() : formData.modelo.trim() || 'S/M',
+      serie: formData.serie.trim() || 'S/N',
+      color: formData.color === 'Otro' ? colorOtro.trim() : formData.color.trim(),
+      material: formData.material === 'Otro' ? materialOtro.trim() : formData.material.trim(),
+      custodio: formData.custodio === 'Otro' ? custodioOtro.trim() : formData.custodio.trim() || 'Sin Asignar',
+      ubicacion: formData.ubicacion === 'Otro' ? ubicacionOtro.trim() : formData.ubicacion.trim() || 'Bodega Central',
+      estado: formData.estado
+    };
+
+    try {
+      const guardados = localStorage.getItem('bienes_inamhi');
+      let listaBienes: any[] = guardados ? JSON.parse(guardados) : [];
+      
+      if (bienAEditar) {
+        const index = listaBienes.findIndex(b => b.codigoEsbye === bienAEditar.codigoEsbye);
+        if (index !== -1) {
+          listaBienes[index] = { ...listaBienes[index], ...nuevoBien };
+        } else {
+          listaBienes.push(nuevoBien);
+        }
+      } else {
+        listaBienes.push(nuevoBien);
+      }
+      
+      localStorage.setItem('bienes_inamhi', JSON.stringify(listaBienes));
+    } catch (e) {
+      console.error('Error al persistir bien en localStorage:', e);
+    }
+
     // Simulación de respuesta y registro
     setTimeout(() => {
       setCargando(false);
       setAlerta({
         tipo: 'success',
-        mensaje: '¡Bien institucional registrado exitosamente en el inventario!'
+        mensaje: bienAEditar ? '¡Bien actualizado exitosamente!' : '¡Bien institucional registrado exitosamente en el inventario!'
       });
 
       // Redirigir al inventario tras el retardo
@@ -292,16 +366,22 @@ export default function RegistroBien() {
                 <label htmlFor="marca">Marca</label>
                 <select id="marca" name="marca" value={formData.marca} onChange={manejarCambio} required disabled={cargando}>
                   <option value="">-- Seleccionar --</option>
-                  <option value="Campbell Scientific">Campbell Scientific</option>
-                  <option value="Davis Instruments">Davis Instruments</option>
-                  <option value="RM Young">RM Young</option>
-                  <option value="Lufft">Lufft</option>
-                  <option value="Panasonic">Panasonic</option>
-                  <option value="Kipp & Zonen">Kipp & Zonen</option>
-                  <option value="Rotronic">Rotronic</option>
-                  <option value="Vaisala">Vaisala</option>
-                  <option value="Sutron">Sutron</option>
+                  {marcasGuardadas.map((m, idx) => (
+                    <option key={idx} value={m}>{m}</option>
+                  ))}
+                  <option value="Otro">Otro...</option>
                 </select>
+                {formData.marca === 'Otro' && (
+                  <input
+                    type="text"
+                    style={{ marginTop: '10px' }}
+                    placeholder="Escriba la nueva marca"
+                    value={marcaOtro}
+                    onChange={(e) => setMarcaOtro(e.target.value)}
+                    required
+                    disabled={cargando}
+                  />
+                )}
               </div>
 
               {/* Modelo Desplegable */}
@@ -309,17 +389,22 @@ export default function RegistroBien() {
                 <label htmlFor="modelo">Modelo</label>
                 <select id="modelo" name="modelo" value={formData.modelo} onChange={manejarCambio} required disabled={cargando}>
                   <option value="">-- Seleccionar --</option>
-                  <option value="CR1000X">Campbell CR1000X</option>
-                  <option value="CR300">Campbell CR300</option>
-                  <option value="Vantage Pro2">Vantage Pro2 Digital</option>
-                  <option value="Model 05103">RM Young 05103 Wind</option>
-                  <option value="Toughbook CF-33">Panasonic CF-33</option>
-                  <option value="Toughbook FZ-G2">Panasonic FZ-G2</option>
-                  <option value="HP2000">Lufft HP2000 Baro</option>
-                  <option value="CMP11">Piranómetro CMP11</option>
-                  <option value="HC2A-S">Termohigrómetro HC2A-S</option>
-                  <option value="WXT536">Vaisala WXT536 Multi</option>
+                  {modelosGuardados.map((m, idx) => (
+                    <option key={idx} value={m}>{m}</option>
+                  ))}
+                  <option value="Otro">Otro...</option>
                 </select>
+                {formData.modelo === 'Otro' && (
+                  <input
+                    type="text"
+                    style={{ marginTop: '10px' }}
+                    placeholder="Escriba el nuevo modelo"
+                    value={modeloOtro}
+                    onChange={(e) => setModeloOtro(e.target.value)}
+                    required
+                    disabled={cargando}
+                  />
+                )}
               </div>
 
               {/* Serie */}
@@ -342,14 +427,22 @@ export default function RegistroBien() {
                 <label htmlFor="color">Color</label>
                 <select id="color" name="color" value={formData.color} onChange={manejarCambio} required disabled={cargando}>
                   <option value="">-- Seleccionar --</option>
-                  <option value="Gris">Gris Técnico</option>
-                  <option value="Negro">Negro Mate</option>
-                  <option value="Blanco">Blanco Ártico</option>
-                  <option value="Azul">Azul Institucional</option>
-                  <option value="Plata">Plata / Metalizado</option>
-                  <option value="Amarillo">Amarillo Seguridad</option>
-                  <option value="Naranja">Naranja Óxido</option>
+                  {coloresGuardados.map((c, idx) => (
+                    <option key={idx} value={c}>{c}</option>
+                  ))}
+                  <option value="Otro">Otro...</option>
                 </select>
+                {formData.color === 'Otro' && (
+                  <input
+                    type="text"
+                    style={{ marginTop: '10px' }}
+                    placeholder="Escriba el nuevo color"
+                    value={colorOtro}
+                    onChange={(e) => setColorOtro(e.target.value)}
+                    required
+                    disabled={cargando}
+                  />
+                )}
               </div>
             </div>
 
@@ -376,13 +469,22 @@ export default function RegistroBien() {
                 <label htmlFor="material">Material</label>
                 <select id="material" name="material" value={formData.material} onChange={manejarCambio} required disabled={cargando}>
                   <option value="">-- Seleccionar --</option>
-                  <option value="Aluminio Anodizado">Aluminio Anodizado</option>
-                  <option value="Acero Inoxidable 316">Acero Inoxidable 316</option>
-                  <option value="Plástico ABS Reforzado">Plástico ABS Reforzado</option>
-                  <option value="Vidrio Borosilicato">Vidrio Borosilicato</option>
-                  <option value="Fibra de Vidrio">Fibra de Vidrio</option>
-                  <option value="Policarbonato">Policarbonato</option>
+                  {materialesGuardados.map((m, idx) => (
+                    <option key={idx} value={m}>{m}</option>
+                  ))}
+                  <option value="Otro">Otro...</option>
                 </select>
+                {formData.material === 'Otro' && (
+                  <input
+                    type="text"
+                    style={{ marginTop: '10px' }}
+                    placeholder="Escriba el nuevo material"
+                    value={materialOtro}
+                    onChange={(e) => setMaterialOtro(e.target.value)}
+                    required
+                    disabled={cargando}
+                  />
+                )}
               </div>
 
               {/* Ubicacion Desplegable */}
@@ -390,14 +492,22 @@ export default function RegistroBien() {
                 <label htmlFor="ubicacion">Ubicación / Estación</label>
                 <select id="ubicacion" name="ubicacion" value={formData.ubicacion} onChange={manejarCambio} required disabled={cargando}>
                   <option value="">-- Seleccionar --</option>
-                  <option value="Estación Iñaquito - Quito">Estación Iñaquito - Quito</option>
-                  <option value="Estación Izobamba">Estación Izobamba</option>
-                  <option value="Estación Tababela">Estación Tababela</option>
-                  <option value="Estación Cotopaxi">Estación Cotopaxi</option>
-                  <option value="Laboratorio de Calibración">Laboratorio de Calibración</option>
-                  <option value="Estación El Labrador">Estación El Labrador</option>
-                  <option value="Bodega Central INAMHI">Bodega Central INAMHI</option>
+                  {ubicacionesGuardadas.map((u, idx) => (
+                    <option key={idx} value={u}>{u}</option>
+                  ))}
+                  <option value="Otro">Otro...</option>
                 </select>
+                {formData.ubicacion === 'Otro' && (
+                  <input
+                    type="text"
+                    style={{ marginTop: '10px' }}
+                    placeholder="Escriba la nueva ubicación"
+                    value={ubicacionOtro}
+                    onChange={(e) => setUbicacionOtro(e.target.value)}
+                    required
+                    disabled={cargando}
+                  />
+                )}
               </div>
             </div>
 
@@ -407,13 +517,23 @@ export default function RegistroBien() {
                 <label htmlFor="custodio">Custodio Responsable</label>
                 <select id="custodio" name="custodio" value={formData.custodio} onChange={manejarCambio} required disabled={cargando}>
                   <option value="">-- Seleccionar --</option>
-                  <option value="Ing. Carlos Mendoza">Ing. Carlos Mendoza (Analista Instrumentación)</option>
-                  <option value="Tec. Mariana Silva">Tec. Mariana Silva (Técnico de Redes)</option>
-                  <option value="Dra. Elena Rostova">Dra. Elena Rostova (Jefe de Laboratorio)</option>
-                  <option value="Tec. Luis Narváez">Tec. Luis Narváez (Mantenimiento Estaciones)</option>
-                  <option value="Ing. Diana Paredes">Ing. Diana Paredes (Especialista Hidrometría)</option>
-                  <option value="Lic. Roberto Gómez">Lic. Roberto Gómez (Jefe de Activos Fijos)</option>
+                  {custodiosGuardados.map((c, idx) => (
+                    <option key={idx} value={c}>{c}</option>
+                  ))}
+                  <option value="Otro">Otro...</option>
                 </select>
+                
+                {formData.custodio === 'Otro' && (
+                  <input
+                    type="text"
+                    style={{ marginTop: '10px' }}
+                    placeholder="Escriba el nombre del nuevo custodio"
+                    value={custodioOtro}
+                    onChange={(e) => setCustodioOtro(e.target.value)}
+                    required
+                    disabled={cargando}
+                  />
+                )}
               </div>
 
               {/* Estado Físico del Bien (Bueno, Regular, Malo) */}
