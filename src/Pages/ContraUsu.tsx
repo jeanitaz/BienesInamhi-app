@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
 import FondoEstrellas from '../components/FondoEstrellas';
+import FondoClaro from '../components/FondoViento';
+import { useTheme } from '../components/ThemeContext';
 import '../styles/ContraUsu.css';
 
 export default function ContraUsu() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [usuario, setUsuario] = useState('');
   const [tipoAcceso, setTipoAcceso] = useState<'tecnico' | 'consultor'>('tecnico');
   const [enviado, setEnviado] = useState(false);
@@ -45,19 +48,27 @@ export default function ContraUsu() {
   };
 
   return (
-    <div className={`contra-container ${tipoAcceso === 'tecnico' ? 'liquid-theme' : 'consultor-theme'}`}>
-      {/* Fondos dinámicos según el tipo de acceso */}
-      {tipoAcceso === 'tecnico' ? (
-        <>
-          <FondoNodos />
-          <div className="ambient-light light-1"></div>
-          <div className="ambient-light light-2"></div>
-        </>
+    <div className={`contra-container ${theme === 'dark' ? (tipoAcceso === 'tecnico' ? 'liquid-theme' : 'consultor-theme') : 'light-theme'}`}>
+      {/* Fondos dinámicos según el tipo de acceso y tema */}
+      {theme === 'dark' ? (
+        tipoAcceso === 'tecnico' ? (
+          <>
+            <FondoNodos />
+            <div className="ambient-light light-1"></div>
+            <div className="ambient-light light-2"></div>
+          </>
+        ) : (
+          <>
+            <FondoEstrellas />
+            <div className="ambient-light light-1-consultor"></div>
+            <div className="ambient-light light-2-consultor"></div>
+          </>
+        )
       ) : (
         <>
-          <FondoEstrellas />
-          <div className="ambient-light light-1-consultor"></div>
-          <div className="ambient-light light-2-consultor"></div>
+          <FondoClaro />
+          <div className="ambient-light light-1" style={{ opacity: 0.15 }}></div>
+          <div className="ambient-light light-2" style={{ opacity: 0.15 }}></div>
         </>
       )}
 

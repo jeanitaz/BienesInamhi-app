@@ -600,3 +600,127 @@
   0% { transform: rotate(-12deg); }
   100% { transform: rotate(12deg); }
 }
+
+/* ==========================================================================
+   TEMA CLARO (LIGHT THEME) PARA LOGIN
+   ========================================================================== */
+.login-container.light-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  background-color: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container.light-theme .ambient-light {
+  opacity: 0.15;
+  filter: blur(120px);
+}
+
+.login-container.light-theme .light-1 {
+  background: #00d2ff;
+}
+
+.login-container.light-theme .light-2 {
+  background: #3a7bd5;
+}
+
+.login-container.light-theme .login-card.liquid-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 15px 35px rgba(10, 66, 117, 0.05), 0 1px 3px rgba(10, 66, 117, 0.02);
+  color: #2c3e50;
+}
+
+.login-container.light-theme .btn-back-home {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #475569;
+}
+
+.login-container.light-theme .btn-back-home:hover {
+  background: #f8fafc;
+  border-color: #0a4275;
+  color: #0a4275;
+  box-shadow: 0 4px 12px rgba(10, 66, 117, 0.08);
+}
+
+.login-container.light-theme .inamhi-logo-liquid {
+  filter: drop-shadow(0 4px 10px rgba(10, 66, 117, 0.12));
+}
+
+.login-container.light-theme .login-title {
+  color: #0a4275;
+}
+
+.login-container.light-theme .login-subtitle {
+  color: #607d8b;
+}
+
+.login-container.light-theme .input-group label {
+  color: #475569;
+}
+
+.login-container.light-theme .input-group input {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #2c3e50;
+}
+
+.login-container.light-theme .input-group input::placeholder {
+  color: #94a3b8;
+}
+
+.login-container.light-theme .input-group input:focus {
+  background: #ffffff;
+  border-color: #1e88e5;
+  box-shadow: 0 0 10px rgba(30, 136, 229, 0.15);
+}
+
+.login-container.light-theme .password-toggle {
+  color: #94a3b8;
+}
+
+.login-container.light-theme .password-toggle:hover {
+  color: #1e88e5;
+}
+
+.login-container.light-theme .forgot-password {
+  color: #1e88e5;
+}
+
+.login-container.light-theme .forgot-password:hover {
+  color: #0a4275;
+}
+
+.login-container.light-theme .btn-login {
+  background: linear-gradient(135deg, #0a4275, #1e88e5);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(10, 66, 117, 0.12);
+}
+
+.login-container.light-theme .btn-login:hover {
+  background: linear-gradient(135deg, #0d5494, #2196f3);
+  box-shadow: 0 10px 24px rgba(10, 66, 117, 0.2);
+}
+
+.login-container.light-theme .login-tab-btn {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  color: #64748b;
+}
+
+.login-container.light-theme .login-tab-btn.active {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #0a4275;
+  box-shadow: 0 2px 8px rgba(10, 66, 117, 0.08);
+}

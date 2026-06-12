@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
+import FondoClaro from '../components/FondoViento';
+import { useTheme } from '../components/ThemeContext';
 import '../styles/ListaUsuarios.css'; // Importación de la hoja de estilos dedicada premium
 
 export default function ListaUsuarios() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [usuariosLista, setUsuariosLista] = useState<any[]>([]);
 
   // Estados para el modal de cambio de contraseña
@@ -77,10 +80,10 @@ export default function ListaUsuarios() {
   };
 
   return (
-    <div className="usuarios-list-container">
-      <FondoNodos />
-      <div className="ambient-light light-1"></div>
-      <div className="ambient-light light-2"></div>
+    <div className={`usuarios-list-container ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+      {theme === 'dark' ? <FondoNodos /> : <FondoClaro />}
+      <div className="ambient-light light-1" style={theme === 'light' ? { opacity: 0.15 } : undefined}></div>
+      <div className="ambient-light light-2" style={theme === 'light' ? { opacity: 0.15 } : undefined}></div>
 
       <div className="centered-wrapper" style={{ maxWidth: '1000px' }}>
         <div className="listado-card liquid-glass">

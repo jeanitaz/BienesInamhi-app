@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
 
-/* Contenedor Base - Tema Claro */
-.admin-layout.light-theme {
+/* Contenedor Base - Tema Claro/Oscuro (Estructura de Layout Común) */
+.admin-layout {
   font-family: 'Outfit', sans-serif;
   display: flex;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  color: #0f172a; /* Texto principal oscuro */
+  color: #0f172a; /* Texto principal oscuro por defecto */
   position: relative;
 }
 
@@ -706,3 +706,187 @@
     top: 75px;
   }
 }
+
+/* ==========================================================================
+   TEMA OSCURO (DARK THEME) PARA ADMIN DASHBOARD
+   ========================================================================== */
+.admin-layout.dark-theme {
+  background-color: #030b14;
+  color: #f8fafc;
+}
+
+.admin-layout.dark-theme .solid-panel {
+  background: rgba(10, 25, 41, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.admin-layout.dark-theme .sidebar-logo {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.admin-layout.dark-theme .sidebar-footer {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.admin-layout.dark-theme .nav-item {
+  color: #94a3b8;
+}
+
+.admin-layout.dark-theme .nav-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #00d2ff;
+}
+
+.admin-layout.dark-theme .nav-item.active {
+  background: rgba(0, 210, 255, 0.1);
+  color: #00d2ff;
+  font-weight: 600;
+}
+
+.admin-layout.dark-theme .admin-name {
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .admin-role {
+  color: #94a3b8;
+}
+
+.admin-layout.dark-theme .btn-logout {
+  background: rgba(225, 29, 72, 0.1);
+  border-color: rgba(225, 29, 72, 0.2);
+  color: #fda4af;
+}
+
+.admin-layout.dark-theme .btn-logout:hover {
+  background: #e11d48;
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .admin-header h2 {
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .search-bar {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.admin-layout.dark-theme .search-bar:focus {
+  border-color: #00d2ff;
+}
+
+.admin-layout.dark-theme .search-bar::placeholder {
+  color: #64748b;
+}
+
+.admin-layout.dark-theme .stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-layout.dark-theme .stat-card:hover {
+  border-color: rgba(0, 210, 255, 0.25);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+.admin-layout.dark-theme .stat-card h4 {
+  color: #94a3b8;
+}
+
+.admin-layout.dark-theme .stat-value {
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .dashboard-section h3 {
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .recent-item {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.admin-layout.dark-theme .recent-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-layout.dark-theme .recent-info h5 {
+  color: #e2e8f0;
+}
+
+.admin-layout.dark-theme .recent-info p {
+  color: #94a3b8;
+}
+
+.admin-layout.dark-theme .recent-time {
+  color: #64748b;
+}
+
+.admin-layout.dark-theme .notif-dropdown {
+  background: #0d1527;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+.admin-layout.dark-theme .notif-dropdown-header {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .notif-empty-state p {
+  color: #94a3b8;
+}
+
+.admin-layout.dark-theme .notif-item {
+  border-bottom-color: rgba(255, 255, 255, 0.04);
+}
+
+.admin-layout.dark-theme .notif-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-layout.dark-theme .notif-item-icon {
+  background: rgba(255, 255, 255, 0.04);
+  color: #38bdf8;
+}
+
+.admin-layout.dark-theme .notif-item-user {
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .notif-item-role {
+  color: #94a3b8;
+}
+
+.admin-layout.dark-theme .notif-item-time {
+  color: #64748b;
+}
+
+.admin-layout.dark-theme .table-header h3 {
+  color: #ffffff;
+}
+
+.admin-layout.dark-theme .bienes-table th {
+  color: #cbd5e1;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-layout.dark-theme .bienes-table td {
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-layout.dark-theme .btn-edit {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #00d2ff;
+}
+
+.admin-layout.dark-theme .btn-edit:hover {
+  background: rgba(0, 210, 255, 0.1);
+  border-color: #00d2ff;
+  color: #ffffff;
+}

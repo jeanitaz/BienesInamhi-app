@@ -1,11 +1,14 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../components/ThemeContext';
 import FondoNodos from '../components/FondoParticulas';
 import FondoEstrellas from '../components/FondoEstrellas';
+import FondoClaro from '../components/FondoViento';
 import '../styles/Login.css';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [tipoAcceso, setTipoAcceso] = useState<'tecnico' | 'consultor'>('tecnico');
   const [credenciales, setCredenciales] = useState({
     usuario: '',
@@ -28,47 +31,47 @@ export default function Login() {
     setCredenciales({ usuario: '', password: '' });
   };
 
-
-
   const manejarEnvio = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIngresando(true);
+    setNotificacionToast(null);
 
-    const usuarioIngresado = credenciales.usuario.trim().toLowerCase();
-
-    // Validación de credenciales de Administrador quemadas
-    if (usuarioIngresado === 'admin@inamhi.gob.ec') {
-      if (credenciales.password !== 'admin') {
-        setTimeout(() => {
-          setIngresando(false);
-          setNotificacionToast("⚠️ Contraseña incorrecta para el Administrador.");
-          setTimeout(() => setNotificacionToast(null), 4000);
-        }, 600);
-        return;
-      }
-
-      // Acceso correcto como Administrador
-      localStorage.setItem('userRole', 'admin');
-      console.log("Iniciando sesión como Administrador (admin@inamhi.gob.ec)");
-      setTimeout(() => {
-        setIngresando(false);
-        navigate('/admin');
-      }, 1200);
+    if (!credenciales.usuario.trim() || !credenciales.password.trim()) {
+      setNotificacionToast('Por favor, complete todos los campos.');
       return;
     }
 
-    // Simulación de accesos para otros usuarios
-    console.log(`Iniciando sesión como ${tipoAcceso}:`, credenciales);
-    localStorage.setItem('userRole', tipoAcceso);
+    setIngresando(true);
 
     setTimeout(() => {
       setIngresando(false);
-      navigate('/inventario');
+
+      if (tipoAcceso === 'tecnico') {
+        const userClean = credenciales.usuario.trim().toLowerCase();
+        if ((userClean === 'tecnico' || userClean === 'tecnico@inamhi.gob.ec') && credenciales.password === 'tecnico123') {
+          localStorage.setItem('userRole', 'tecnico');
+          localStorage.setItem('userName', 'Técnico de Bienes');
+          navigate('/inventario');
+        } else if ((userClean === 'admin' || userClean === 'admin@inamhi.gob.ec') && credenciales.password === 'admin123') {
+          localStorage.setItem('userRole', 'admin');
+          localStorage.setItem('userName', 'Administrador Global');
+          navigate('/admin');
+        } else {
+          setNotificacionToast('Credenciales de Técnico incorrectas.');
+        }
+      } else {
+        if (credenciales.usuario === 'consultor' && credenciales.password === 'consultor123') {
+          localStorage.setItem('userRole', 'consultor');
+          localStorage.setItem('userName', 'Consultor Externo');
+          navigate('/inventario');
+        } else {
+          setNotificacionToast('Credenciales de Consultor incorrectas.');
+        }
+      }
     }, 1200);
   };
 
   return (
-    <div className={`login-container ${tipoAcceso === 'tecnico' ? 'liquid-theme' : 'consultor-theme'}`}>
+    <div className={`login-container ${theme === 'dark' ? (tipoAcceso === 'tecnico' ? 'liquid-theme' : 'consultor-theme') : 'light-theme'}`}>
       {/* Toast flotante para solicitudes de restablecimiento */}
       {notificacionToast && (
         <div className="login-toast">
@@ -76,18 +79,26 @@ export default function Login() {
           <p>{notificacionToast}</p>
         </div>
       )}
-      {/* Fondo y luces dinámicas según el rol */}
-      {tipoAcceso === 'tecnico' ? (
-        <>
-          <FondoNodos />
-          <div className="ambient-light light-1"></div>
-          <div className="ambient-light light-2"></div>
-        </>
+      {/* Fondo y luces dinámicas según el rol y tema */}
+      {theme === 'dark' ? (
+        tipoAcceso === 'tecnico' ? (
+          <>
+            <FondoNodos />
+            <div className="ambient-light light-1"></div>
+            <div className="ambient-light light-2"></div>
+          </>
+        ) : (
+          <>
+            <FondoEstrellas />
+            <div className="ambient-light light-1-consultor"></div>
+            <div className="ambient-light light-2-consultor"></div>
+          </>
+        )
       ) : (
         <>
-          <FondoEstrellas />
-          <div className="ambient-light light-1-consultor"></div>
-          <div className="ambient-light light-2-consultor"></div>
+          <FondoClaro />
+          <div className="ambient-light light-1" style={{ opacity: 0.15 }}></div>
+          <div className="ambient-light light-2" style={{ opacity: 0.15 }}></div>
         </>
       )}
 
@@ -156,8 +167,8 @@ export default function Login() {
                 name="usuario"
                 placeholder={
                   tipoAcceso === 'tecnico'
-                    ? 'ej. admin@inamhi.gob.ec o tecnico'
-                    : 'ej. consultor.silva'
+                    ? 'ej. admin@inamhi.gob.ec o jitaz'
+                    : 'ej. jitaz'
                 }
                 value={credenciales.usuario}
                 onChange={manejarCambio}

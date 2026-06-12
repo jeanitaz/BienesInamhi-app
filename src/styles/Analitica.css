@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
 
-/* --- CONTENEDOR BASE DE ANALÍTICA --- */
-.analitica-layout.light-theme {
+/* --- CONTENEDOR BASE DE ANALÍTICA (Estructura de Layout Común) --- */
+.analitica-layout {
   font-family: 'Outfit', sans-serif;
   display: flex;
   height: 100vh;
@@ -926,3 +926,338 @@
     margin-top: 10px;
   }
 }
+
+/* ==========================================================================
+   TEMA OSCURO (DARK THEME) PARA ANALITICA
+   ========================================================================== */
+.analitica-layout.dark-theme {
+  background-color: #030b14;
+  color: #f8fafc;
+}
+
+.analitica-layout.dark-theme .solid-panel {
+  background: rgba(10, 25, 41, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.analitica-layout.dark-theme .sidebar-logo {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .sidebar-footer {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .nav-item {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .nav-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #00d2ff;
+}
+
+.analitica-layout.dark-theme .nav-item.active {
+  background: rgba(0, 210, 255, 0.1);
+  color: #00d2ff;
+  font-weight: 600;
+}
+
+.analitica-layout.dark-theme .admin-name {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .admin-role {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .btn-logout {
+  background: rgba(225, 29, 72, 0.1);
+  border-color: rgba(225, 29, 72, 0.2);
+  color: #fda4af;
+}
+
+.analitica-layout.dark-theme .btn-logout:hover {
+  background: #e11d48;
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .analitica-header h2 {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .analitica-subtitle {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .btn-reload {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.analitica-layout.dark-theme .btn-reload:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .kpi-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .kpi-card:hover {
+  border-color: rgba(0, 210, 255, 0.2);
+}
+
+.analitica-layout.dark-theme .kpi-title {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .kpi-value {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .chart-card-header h3 {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .chart-card-header p {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .donut-center-val {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .donut-center-lbl {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .legend-name {
+  color: #e2e8f0;
+}
+
+.analitica-layout.dark-theme .legend-count {
+  color: #cbd5e1;
+}
+
+.analitica-layout.dark-theme .legend-pct {
+  color: #64748b;
+}
+
+.analitica-layout.dark-theme .grid-line {
+  stroke: rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .cuadricula-line {
+  stroke: rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .axis-line {
+  stroke: rgba(255, 255, 255, 0.12);
+}
+
+.analitica-layout.dark-theme .chart-axis-lbl {
+  fill: #64748b;
+}
+
+.analitica-layout.dark-theme .trend-tag-lbl {
+  fill: #cbd5e1;
+}
+
+.analitica-layout.dark-theme .growth-badge-txt {
+  fill: #10b981;
+}
+
+.analitica-layout.dark-theme .estacion-item {
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+}
+
+.analitica-layout.dark-theme .estacion-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.analitica-layout.dark-theme .estacion-item.active {
+  background: rgba(0, 210, 255, 0.08);
+  border-left-color: #00d2ff;
+  color: #00d2ff;
+}
+
+.analitica-layout.dark-theme .estacion-item.active .estacion-name {
+  color: #00d2ff;
+}
+
+.analitica-layout.dark-theme .estacion-name {
+  color: #e2e8f0;
+}
+
+.analitica-layout.dark-theme .estacion-count {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .detalle-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .detalle-card h4 {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .detalle-grid p {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .detalle-grid strong {
+  color: #e2e8f0;
+}
+
+.analitica-layout.dark-theme .mapa-map-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .mapa-base-path {
+  fill: #1e293b;
+  stroke: #475569;
+}
+
+.analitica-layout.dark-theme .map-building-card {
+  fill: #0f172a;
+  stroke: #334155;
+}
+
+.analitica-layout.dark-theme .map-building-card.active {
+  stroke: #00d2ff;
+  fill: rgba(0, 210, 255, 0.08);
+}
+
+.analitica-layout.dark-theme .map-building-title {
+  fill: #94a3b8;
+}
+
+.analitica-layout.dark-theme .map-pin-circle {
+  stroke: #0f172a;
+}
+
+/* --- ADAPTACIONES DE TARJETAS Y TABLAS DE ANALÍTICA EN MODO OSCURO --- */
+.analitica-layout.dark-theme .analytic-panel {
+  background: rgba(10, 25, 41, 0.75) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+.analitica-layout.dark-theme .chart-card-subtitle {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .legend-item:hover,
+.analitica-layout.dark-theme .legend-item.active {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.analitica-layout.dark-theme .legend-item {
+  color: #cbd5e1;
+}
+
+.analitica-layout.dark-theme .legend-item span[style] {
+  color: #cbd5e1 !important;
+}
+
+.analitica-layout.dark-theme .legend-item div span {
+  color: #cbd5e1 !important;
+}
+
+.analitica-layout.dark-theme .legend-item div span:last-child {
+  color: #94a3b8 !important;
+}
+
+.analitica-layout.dark-theme .map-ecuador-bg {
+  fill: #1e293b;
+  stroke: #0d1527;
+}
+
+.analitica-layout.dark-theme .map-province-path:hover {
+  fill: #334155;
+}
+
+.analitica-layout.dark-theme .map-legend {
+  background: rgba(13, 21, 39, 0.95);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.analitica-layout.dark-theme .map-legend-item {
+  color: #cbd5e1;
+}
+
+.analitica-layout.dark-theme .station-floating-panel {
+  background: rgba(13, 21, 39, 0.95);
+  border-color: rgba(0, 210, 255, 0.3);
+}
+
+.analitica-layout.dark-theme .station-floating-panel h4 {
+  color: #ffffff;
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.analitica-layout.dark-theme .station-stat-item {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .station-stat-item strong {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .table-responsive-wrapper {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.analitica-layout.dark-theme .efficiency-table th {
+  background: #0d1527 !important;
+  color: #cbd5e1;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+}
+
+.analitica-layout.dark-theme .efficiency-table td {
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.analitica-layout.dark-theme .efficiency-table tr:hover td {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.analitica-layout.dark-theme .station-name-td {
+  color: #ffffff;
+}
+
+.analitica-layout.dark-theme .health-percentage {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .health-bar-bg {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.analitica-layout.dark-theme .kpi-header h4 {
+  color: #94a3b8;
+}
+
+.analitica-layout.dark-theme .btn-refresh {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+.analitica-layout.dark-theme .btn-refresh:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}

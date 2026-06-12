@@ -231,3 +231,127 @@
     font-size: 0.95rem;
   }
 }
+
+/* ==========================================================================
+   TEMA CLARO (LIGHT THEME) PARA CONTRAUSU
+   ========================================================================== */
+.contra-container.light-theme {
+  background-color: #f1f5f9;
+}
+
+.contra-container.light-theme .ambient-light {
+  opacity: 0.15;
+  filter: blur(120px);
+}
+
+.contra-container.light-theme .contra-card.liquid-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 15px 35px rgba(10, 66, 117, 0.05), 0 1px 3px rgba(10, 66, 117, 0.02);
+  color: #2c3e50;
+}
+
+.contra-container.light-theme .contra-title {
+  color: #0a4275;
+}
+
+.contra-container.light-theme .contra-subtitle {
+  color: #475569;
+}
+
+.contra-container.light-theme .input-group label {
+  color: #475569;
+}
+
+.contra-container.light-theme .input-group input {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #2c3e50;
+}
+
+.contra-container.light-theme .input-group input:focus {
+  border-color: #1e88e5;
+  box-shadow: 0 0 10px rgba(30, 136, 229, 0.15);
+}
+
+.contra-container.light-theme .contra-info-note {
+  background: #e0f2fe;
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+.contra-container.light-theme .contra-info-note p {
+  color: #0369a1;
+}
+
+.contra-container.light-theme .btn-submit.btn-liquid {
+  background: linear-gradient(135deg, #0a4275, #1e88e5);
+  box-shadow: 0 8px 20px rgba(10, 66, 117, 0.12);
+  color: #ffffff;
+}
+
+.contra-container.light-theme .btn-submit.btn-liquid:hover {
+  background: linear-gradient(135deg, #0d5494, #2196f3);
+  box-shadow: 0 10px 24px rgba(10, 66, 117, 0.2);
+}
+
+.contra-container.light-theme .btn-back-home {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #475569;
+}
+
+.contra-container.light-theme .btn-back-home:hover {
+  background: #f8fafc;
+  border-color: #0a4275;
+  color: #0a4275;
+}
+
+.contra-container.light-theme .user-success-badge {
+  background: rgba(10, 66, 117, 0.03);
+  border-color: rgba(10, 66, 117, 0.08);
+}
+
+.contra-container.light-theme .user-success-name {
+  color: #0a4275;
+}
+
+.contra-container.light-theme .contra-success-text {
+  color: #475569;
+}
+
+.contra-container.light-theme .contra-success-footer-note {
+  color: #64748b;
+}
+
+.contra-container.light-theme .login-tabs-bar {
+  background: rgba(10, 66, 117, 0.04);
+  border: 1px solid rgba(10, 66, 117, 0.08);
+  border-radius: 14px;
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+}
+
+.contra-container.light-theme .login-tab-btn {
+  background: transparent;
+  color: #64748b;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex: 1;
+}
+
+.contra-container.light-theme .login-tab-btn.active {
+  background: #ffffff;
+  color: #0a4275;
+  box-shadow: 0 4px 10px rgba(10, 66, 117, 0.06);
+  font-weight: 600;
+}
+

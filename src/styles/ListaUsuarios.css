@@ -367,3 +367,102 @@
   box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3);
   transform: translateY(-1px);
 }
+
+/* ==========================================================================
+   TEMA CLARO (LIGHT THEME) PARA LISTADO DE USUARIOS
+   ========================================================================== */
+.usuarios-list-container.light-theme {
+  background-color: #f1f5f9;
+}
+
+.usuarios-list-container.light-theme .listado-card.liquid-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 15px 35px rgba(10, 66, 117, 0.05), 0 1px 3px rgba(10, 66, 117, 0.02);
+}
+
+.usuarios-list-container.light-theme .btn-back-admin {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #475569;
+}
+
+.usuarios-list-container.light-theme .btn-back-admin:hover {
+  background: #f8fafc;
+  border-color: #0a4275;
+  color: #0a4275;
+  box-shadow: 0 4px 12px rgba(10, 66, 117, 0.08);
+}
+
+.usuarios-list-container.light-theme .main-title {
+  color: #0a4275;
+}
+
+.usuarios-list-container.light-theme .subtitle {
+  color: #475569;
+}
+
+.usuarios-list-container.light-theme .user-capsule-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 30px rgba(10, 66, 117, 0.02);
+}
+
+.usuarios-list-container.light-theme .user-capsule-card:hover {
+  border-color: rgba(10, 66, 117, 0.12);
+  box-shadow: 0 15px 40px rgba(10, 66, 117, 0.05);
+}
+
+.usuarios-list-container.light-theme .user-card-fullname {
+  color: #0a4275;
+}
+
+.usuarios-list-container.light-theme .user-card-username {
+  color: #475569;
+}
+
+.usuarios-list-container.light-theme .user-card-username strong {
+  color: #64748b;
+}
+
+.usuarios-list-container.light-theme .role-tecnico .btn-reset-key {
+  background: rgba(10, 66, 117, 0.05);
+  color: #0a4275;
+  border-color: rgba(10, 66, 117, 0.12);
+}
+
+.usuarios-list-container.light-theme .role-tecnico .btn-reset-key:hover {
+  background: linear-gradient(135deg, #0a4275, #1e88e5);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 15px rgba(10, 66, 117, 0.2);
+}
+
+.usuarios-list-container.light-theme .role-consultor .btn-reset-key {
+  background: rgba(46, 125, 50, 0.05);
+  color: #2e7d32;
+  border-color: rgba(46, 125, 50, 0.12);
+}
+
+.usuarios-list-container.light-theme .role-consultor .btn-reset-key:hover {
+  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.2);
+}
+
+.usuarios-list-container.light-theme .btn-delete-user {
+  background: rgba(220, 38, 38, 0.05);
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.12);
+}
+
+.usuarios-list-container.light-theme .btn-delete-user:hover {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 15px rgba(220, 38, 38, 0.2);
+}
+

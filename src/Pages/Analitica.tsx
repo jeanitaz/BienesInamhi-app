@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoClaro from '../components/FondoViento';
+import FondoNodos from '../components/FondoParticulas';
+import { useTheme } from '../components/ThemeContext';
 import '../styles/Analitica.css';
 
 interface Estacion {
@@ -18,6 +20,7 @@ interface Estacion {
 
 export default function Analitica() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [spinning, setSpinning] = useState(false);
   const [activeDonutIndex, setActiveDonutIndex] = useState<number | null>(null);
@@ -212,9 +215,9 @@ export default function Analitica() {
 
 
   return (
-    <div className="analitica-layout light-theme">
-      {/* Fondo de viento dinámico claro */}
-      <FondoClaro />
+    <div className={`analitica-layout ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+      {/* Fondo de viento dinámico claro/oscuro */}
+      {theme === 'dark' ? <FondoNodos /> : <FondoClaro />}
 
       {/* Overlay para menú móvil */}
       {sidebarOpen && (
@@ -250,7 +253,11 @@ export default function Analitica() {
               <span className="admin-role">{role === 'admin' ? 'Gestión Global' : 'Gestión de Bienes'}</span>
             </div>
           </div>
-          <button className="btn-logout" onClick={() => navigate('/')}>Cerrar Sesión</button>
+          <button className="btn-logout" onClick={() => {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
+            navigate('/');
+          }}>Cerrar Sesión</button>
         </div>
       </aside>
 
@@ -412,8 +419,8 @@ export default function Analitica() {
                   >
                     <span className="legend-color" style={{ backgroundColor: slice.color }}></span>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 500 }}>{slice.label}</span>
-                      <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 500, color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>{slice.label}</span>
+                      <span style={{ fontSize: '0.72rem', color: theme === 'dark' ? '#cbd5e1' : '#64748b' }}>
                         {slice.valor} ({slice.porcentaje}%)
                       </span>
                     </div>
@@ -427,7 +434,7 @@ export default function Analitica() {
           <div className="analytic-panel chart-card" style={{ position: 'relative' }}>
             <div className="chart-card-header">
               <h3>Tendencia Histórica de Activos</h3>
-              <span className="kpi-icon" style={{ background: '#e0f2fe', color: '#0ea5e9' }}>📈</span>
+              <span className="kpi-icon" style={{ background: theme === 'dark' ? 'rgba(0, 210, 255, 0.1)' : '#e0f2fe', color: theme === 'dark' ? '#00d2ff' : '#0ea5e9' }}>📈</span>
             </div>
             <p className="chart-card-subtitle">Crecimiento del registro de inventario (2021 - 2026)</p>
             <div className="chart-container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -832,7 +839,7 @@ export default function Analitica() {
                             style={{
                               background: 'none',
                               border: 'none',
-                              color: '#0ea5e9',
+                              color: theme === 'dark' ? '#00d2ff' : '#0ea5e9',
                               cursor: 'pointer',
                               fontSize: '0.75rem',
                               fontWeight: '600',
@@ -840,7 +847,7 @@ export default function Analitica() {
                               borderRadius: '6px',
                               transition: 'background 0.2s'
                             }}
-                            onMouseEnter={e => (e.currentTarget.style.background = '#e0f2fe')}
+                            onMouseEnter={e => (e.currentTarget.style.background = theme === 'dark' ? 'rgba(0, 210, 255, 0.12)' : '#e0f2fe')}
                             onMouseLeave={e => (e.currentTarget.style.background = 'none')}
                           >
                             ↗️

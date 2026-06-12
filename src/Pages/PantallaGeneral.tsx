@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo, type ChangeEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FondoClaro from '../components/FondoViento';
+import FondoNodos from '../components/FondoParticulas';
+import { useTheme } from '../components/ThemeContext';
 import * as XLSX from 'xlsx';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
@@ -27,6 +29,7 @@ interface Bien {
 
 export default function PantallaGeneral() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [filtroEstado, setFiltroEstado] = useState<string>('todos');
@@ -627,9 +630,9 @@ export default function PantallaGeneral() {
   };
 
   return (
-    <div className="pantalla-general-layout light-theme">
-      {/* Fondo de líneas animadas sutiles en tono claro */}
-      <FondoClaro />
+    <div className={`pantalla-general-layout ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+      {/* Fondo de líneas animadas sutiles en tono claro/oscuro */}
+      {theme === 'dark' ? <FondoNodos /> : <FondoClaro />}
 
       {/* Toast contextual de navegación desde otra vista */}
       {toastContextual && (
@@ -655,7 +658,15 @@ export default function PantallaGeneral() {
           <div className="header-left">
             <button 
               className="btn-back-dashboard" 
-              onClick={() => navigate(role === 'admin' ? '/admin' : '/')} 
+              onClick={() => {
+                if (role === 'admin') {
+                  navigate('/admin');
+                } else {
+                  localStorage.removeItem('userRole');
+                  localStorage.removeItem('userName');
+                  navigate('/');
+                }
+              }}
               aria-label={role === 'admin' ? 'Volver a Dashboard' : 'Cerrar Sesión'}
               title={role === 'admin' ? 'Volver a Dashboard' : 'Cerrar Sesión'}
             >
@@ -1226,8 +1237,8 @@ export default function PantallaGeneral() {
             <div className="modal-body" style={{ padding: '20px', overflowY: 'auto', maxHeight: '70vh' }}>
               {/* Encabezado Rápido del Activo */}
               <div className="details-quick-header" style={{
-                background: 'linear-gradient(135deg, rgba(30, 136, 229, 0.08), rgba(0, 210, 255, 0.04))',
-                border: '1px solid rgba(30, 136, 229, 0.15)',
+                background: theme === 'dark' ? 'rgba(0, 210, 255, 0.08)' : 'linear-gradient(135deg, rgba(30, 136, 229, 0.08), rgba(0, 210, 255, 0.04))',
+                border: theme === 'dark' ? '1px solid rgba(0, 210, 255, 0.2)' : '1px solid rgba(30, 136, 229, 0.15)',
                 padding: '16px 20px',
                 borderRadius: '16px',
                 marginBottom: '20px',
@@ -1237,10 +1248,10 @@ export default function PantallaGeneral() {
                 gap: '15px'
               }}>
                 <div style={{ textAlign: 'left' }}>
-                  <h4 style={{ margin: 0, fontSize: '1.2rem', color: '#0f172a', fontWeight: 800 }}>
+                  <h4 style={{ margin: 0, fontSize: '1.2rem', color: theme === 'dark' ? '#ffffff' : '#0f172a', fontWeight: 800 }}>
                     {bienSeleccionado.nombreBien}
                   </h4>
-                  <span style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px', display: 'block' }}>
+                  <span style={{ fontSize: '0.8rem', color: theme === 'dark' ? '#cbd5e1' : '#64748b', marginTop: '4px', display: 'block' }}>
                     Código ESBYE: <strong>{bienSeleccionado.codigoEsbye}</strong>
                   </span>
                 </div>
@@ -1265,9 +1276,9 @@ export default function PantallaGeneral() {
                 textAlign: 'left'
               }}>
                 {/* Bloque Identificación */}
-                <div className="details-block" style={{ background: '#f8fafc', padding: '14px 18px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                  <h5 style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: '#0a4275', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔍 Identificación</h5>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.88rem' }}>
+                <div className="details-block" style={{ background: theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : '#f8fafc', padding: '14px 18px', borderRadius: '12px', border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0' }}>
+                  <h5 style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: theme === 'dark' ? '#38bdf8' : '#0a4275', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔍 Identificación</h5>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.88rem', color: theme === 'dark' ? '#cbd5e1' : '#2c3e50' }}>
                     <p style={{ margin: 0 }}><strong>Código ESBYE:</strong> {bienSeleccionado.codigoEsbye}</p>
                     <p style={{ margin: 0 }}><strong>Código Anterior:</strong> {(bienSeleccionado as any).codigoAnterior || 'S/C'}</p>
                     <p style={{ margin: 0 }}><strong>Código Provisional:</strong> {(bienSeleccionado as any).codigoProvisional || 'S/C'}</p>
@@ -1276,9 +1287,9 @@ export default function PantallaGeneral() {
                 </div>
 
                 {/* Bloque Características */}
-                <div className="details-block" style={{ background: '#f8fafc', padding: '14px 18px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                  <h5 style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: '#0a4275', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🛠️ Especificaciones</h5>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.88rem' }}>
+                <div className="details-block" style={{ background: theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : '#f8fafc', padding: '14px 18px', borderRadius: '12px', border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0' }}>
+                  <h5 style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: theme === 'dark' ? '#38bdf8' : '#0a4275', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🛠️ Especificaciones</h5>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.88rem', color: theme === 'dark' ? '#cbd5e1' : '#2c3e50' }}>
                     <p style={{ margin: 0 }}><strong>Marca:</strong> {bienSeleccionado.marca || 'S/M'}</p>
                     <p style={{ margin: 0 }}><strong>Modelo:</strong> {bienSeleccionado.modelo || 'S/M'}</p>
                     <p style={{ margin: 0 }}><strong>Color:</strong> {(bienSeleccionado as any).color || 'S/C'}</p>
@@ -1287,9 +1298,9 @@ export default function PantallaGeneral() {
                 </div>
 
                 {/* Bloque Asignación */}
-                <div className="details-block" style={{ background: '#f8fafc', padding: '14px 18px', borderRadius: '12px', border: '1px solid #e2e8f0', gridColumn: 'span 2' }}>
-                  <h5 style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: '#0a4275', textTransform: 'uppercase', letterSpacing: '0.5px' }}>👤 Asignación e Historial</h5>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', fontSize: '0.88rem' }}>
+                <div className="details-block" style={{ background: theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : '#f8fafc', padding: '14px 18px', borderRadius: '12px', border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0', gridColumn: 'span 2' }}>
+                  <h5 style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: theme === 'dark' ? '#38bdf8' : '#0a4275', textTransform: 'uppercase', letterSpacing: '0.5px' }}>👤 Asignación e Historial</h5>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', fontSize: '0.88rem', color: theme === 'dark' ? '#cbd5e1' : '#2c3e50' }}>
                     <p style={{ margin: 0, gridColumn: 'span 2' }}><strong>Custodio Responsable:</strong> {bienSeleccionado.custodio || 'Sin Asignar'}</p>
                     <p style={{ margin: 0 }}><strong>Ubicación / Estación:</strong> {bienSeleccionado.ubicacion || 'Bodega Central'}</p>
                     <p style={{ margin: 0 }}><strong>Nº de Acta:</strong> {(bienSeleccionado as any).numActa || 'S/A'}</p>
@@ -1301,13 +1312,13 @@ export default function PantallaGeneral() {
               <div className="details-observations-box" style={{
                 marginTop: '15px',
                 textAlign: 'left',
-                background: '#fffbeb',
-                border: '1px solid #fef3c7',
+                background: theme === 'dark' ? 'rgba(245, 158, 11, 0.08)' : '#fffbeb',
+                border: theme === 'dark' ? '1px solid rgba(245, 158, 11, 0.2)' : '1px solid #fef3c7',
                 padding: '14px 18px',
                 borderRadius: '12px'
               }}>
-                <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: '#b45309', textTransform: 'uppercase', letterSpacing: '0.5px' }}>📌 Observaciones / Notas</h5>
-                <p style={{ margin: 0, fontSize: '0.88rem', color: '#78350f', lineHeight: '1.4', fontStyle: 'italic' }}>
+                <h5 style={{ margin: '0 0 6px 0', fontSize: '0.85rem', color: theme === 'dark' ? '#fbbf24' : '#b45309', textTransform: 'uppercase', letterSpacing: '0.5px' }}>📌 Observaciones / Notas</h5>
+                <p style={{ margin: 0, fontSize: '0.88rem', color: theme === 'dark' ? '#fde047' : '#78350f', lineHeight: '1.4', fontStyle: 'italic' }}>
                   {(bienSeleccionado as any).observacion || 'Ninguna observación adicional registrada para este activo.'}
                 </p>
               </div>
@@ -1315,13 +1326,13 @@ export default function PantallaGeneral() {
 
             <div className="modal-actions-separator" style={{ margin: '0' }}></div>
 
-            <div className="modal-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', padding: '15px 20px', background: '#f8fafc' }}>
+            <div className="modal-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', padding: '15px 20px', background: theme === 'dark' ? 'rgba(255, 255, 255, 0.02)' : '#f8fafc' }}>
               <button 
                 type="button" 
                 className="btn-modal-apply" 
                 onClick={() => setMostrarModalDetalles(false)}
                 style={{
-                  background: '#0a4275',
+                  background: theme === 'dark' ? '#0284c7' : '#0a4275',
                   color: '#ffffff',
                   border: 'none',
                   padding: '10px 24px',
@@ -1329,7 +1340,7 @@ export default function PantallaGeneral() {
                   fontWeight: 600,
                   fontSize: '0.9rem',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 10px rgba(10,66,117,0.15)'
+                  boxShadow: theme === 'dark' ? '0 4px 12px rgba(14,165,233,0.3)' : '0 4px 10px rgba(10,66,117,0.15)'
                 }}
               >
                 Cerrar Detalles

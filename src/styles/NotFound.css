@@ -199,3 +199,62 @@
     font-size: 0.95rem;
   }
 }
+
+/* ==========================================================================
+   TEMA CLARO (LIGHT THEME) PARA NOT FOUND
+   ========================================================================== */
+.notfound-container.light-theme {
+  background-color: #f1f5f9;
+}
+
+.notfound-container.light-theme .ambient-light {
+  opacity: 0.15;
+  filter: blur(120px);
+}
+
+.notfound-container.light-theme .notfound-card.liquid-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 15px 35px rgba(10, 66, 117, 0.05), 0 1px 3px rgba(10, 66, 117, 0.02);
+  color: #2c3e50;
+}
+
+.notfound-container.light-theme .lamp-number {
+  color: #0ea5e9;
+  text-shadow: 0 0 25px rgba(14, 165, 233, 0.15);
+  background: linear-gradient(to bottom, #0ea5e9, #0284c7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.notfound-container.light-theme .notfound-title {
+  color: #0a4275;
+  text-shadow: none;
+}
+
+.notfound-container.light-theme .notfound-text {
+  color: #475569;
+}
+
+.notfound-container.light-theme .notfound-warning-box {
+  background: #ffebee;
+  border-color: rgba(198, 40, 40, 0.2);
+}
+
+.notfound-container.light-theme .notfound-warning-box p {
+  color: #c62828;
+}
+
+.notfound-container.light-theme .btn-liquid {
+  background: linear-gradient(135deg, #0a4275, #1e88e5);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(10, 66, 117, 0.12);
+}
+
+.notfound-container.light-theme .btn-liquid:hover {
+  background: linear-gradient(135deg, #0d5494, #2196f3);
+  box-shadow: 0 10px 24px rgba(10, 66, 117, 0.2);
+}
+

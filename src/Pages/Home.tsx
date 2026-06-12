@@ -1,14 +1,17 @@
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../components/ThemeContext';
 import FondoNodos from '../components/FondoParticulas';
+import FondoClaro from '../components/FondoViento';
 import '../styles/Home.css';
 
 export default function Home() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   return (
-    <div className="home-container liquid-theme">
-      {/* Fondo de partículas */}
-      <FondoNodos />
+    <div className={`home-container ${theme === 'dark' ? 'liquid-theme' : 'light-theme'}`}>
+      {/* Fondo adaptativo según el tema */}
+      {theme === 'dark' ? <FondoNodos /> : <FondoClaro />}
       
       {/* Círculos de luz difuminada en el fondo para dar volumen atmosférico */}
       <div className="ambient-light light-1"></div>

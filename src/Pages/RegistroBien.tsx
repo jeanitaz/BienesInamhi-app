@@ -1,12 +1,15 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import FondoClaro from '../components/FondoViento';
+import FondoNodos from '../components/FondoParticulas';
+import { useTheme } from '../components/ThemeContext';
 import '../styles/RegistroBien.css';
 
 export default function RegistroBien() {
   const navigate = useNavigate();
   const location = useLocation();
   const bienAEditar = location.state?.bienAEditar;
+  const { theme } = useTheme();
 
   const [cargando, setCargando] = useState(false);
   const [alerta, setAlerta] = useState<{ tipo: 'success' | 'error'; mensaje: string } | null>(null);
@@ -198,9 +201,9 @@ export default function RegistroBien() {
   };
 
   return (
-    <div className="registro-bien-container light-theme">
+    <div className={`registro-bien-container ${theme === 'dark' ? 'liquid-theme' : 'light-theme'}`}>
       {/* Fondo de partículas dinámico sutil y elegante en tono claro */}
-      <FondoClaro />
+      {theme === 'dark' ? <FondoNodos /> : <FondoClaro />}
 
       <div className="centered-wrapper">
         <div className="registro-bien-card liquid-glass">

@@ -1,14 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
+import FondoClaro from '../components/FondoViento';
+import { useTheme } from '../components/ThemeContext';
 import '../styles/NotFound.css';
 
 export default function NotFound() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   return (
-    <div className="notfound-container">
-      {/* Fondo de red de nodos dinámico */}
-      <FondoNodos />
+    <div className={`notfound-container ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+      {/* Fondo de red de nodos dinámico / viento */}
+      {theme === 'dark' ? <FondoNodos /> : <FondoClaro />}
 
       {/* Luces ambientales tormenta */}
       <div className="ambient-light light-1"></div>
@@ -97,7 +100,7 @@ export default function NotFound() {
             style={{ width: '100%', maxWidth: '240px' }}
             onClick={() => navigate('/login')}
           >
-            Volver a la Base (Login)
+            Volver al inicio
           </button>
         </div>
       </div>

@@ -3,10 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
 import FondoEstrellas from '../components/FondoEstrellas';
 import FondoClaro from '../components/FondoViento';
+import { useTheme } from '../components/ThemeContext';
 import '../styles/CreacionUsuarios.css';
 
 export default function CreacionUsuarios() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     nombreCompleto: '',
     usuario: '',
@@ -23,7 +25,7 @@ export default function CreacionUsuarios() {
 
   // Determinar qué fondo y tema usar
   const resolvedBackground = backgroundType === 'auto'
-    ? (formData.rol === 'tecnico' ? 'particulas' : 'estrellas')
+    ? (theme === 'light' ? 'viento' : (formData.rol === 'tecnico' ? 'particulas' : 'estrellas'))
     : backgroundType;
 
   const getThemeClass = () => {
@@ -244,7 +246,7 @@ export default function CreacionUsuarios() {
                   type="text"
                   id="nombreCompleto"
                   name="nombreCompleto"
-                  placeholder="Ej. Juan Pérez Delgado"
+                  placeholder="Ej. Jean Carlos Itaz"
                   value={formData.nombreCompleto}
                   onChange={manejarCambio}
                   required
@@ -262,7 +264,7 @@ export default function CreacionUsuarios() {
                   type="text"
                   id="usuario"
                   name="usuario"
-                  placeholder="Ej. jperez"
+                  placeholder="Ej. jitaz"
                   value={formData.usuario}
                   onChange={manejarCambio}
                   required

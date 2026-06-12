@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoClaro from '../components/FondoViento';
+import FondoNodos from '../components/FondoParticulas';
+import { useTheme } from '../components/ThemeContext';
 import '../styles/Admin.css';
 
 export default function Admin() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [role] = useState(() => localStorage.getItem('userRole') || 'tecnico');
 
@@ -87,9 +90,9 @@ export default function Admin() {
   };
 
   return (
-    <div className="admin-layout light-theme">
-      {/* Fondo de líneas animadas sutiles en tono claro */}
-      <FondoClaro />
+    <div className={`admin-layout ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+      {/* Fondo de líneas animadas sutiles en tono claro/oscuro */}
+      {theme === 'dark' ? <FondoNodos /> : <FondoClaro />}
 
       {/* Overlay para móviles */}
       {sidebarOpen && (
@@ -122,7 +125,11 @@ export default function Admin() {
               <span className="admin-role">{role === 'admin' ? 'Gestión Global' : 'Gestión de Bienes'}</span>
             </div>
           </div>
-          <button className="btn-logout" onClick={() => navigate('/')}>Cerrar Sesión</button>
+          <button className="btn-logout" onClick={() => {
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
+            navigate('/');
+          }}>Cerrar Sesión</button>
         </div>
       </aside>
 
@@ -245,8 +252,8 @@ export default function Admin() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '1.5rem', animation: 'ringBell 0.5s ease-in-out infinite alternate' }}>🔔</span>
                   <div>
-                    <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#1e293b' }}>Solicitudes de Restablecimiento Pendientes</h3>
-                    <p style={{ margin: '2px 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>Usuarios que han solicitado recuperar su contraseña</p>
+                    <h3 style={{ margin: 0, fontSize: '1.15rem', color: theme === 'dark' ? '#ffffff' : '#1e293b' }}>Solicitudes de Restablecimiento Pendientes</h3>
+                    <p style={{ margin: '2px 0 0 0', fontSize: '0.8rem', color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>Usuarios que han solicitado recuperar su contraseña</p>
                   </div>
                 </div>
                 <span className="badge badge-malo" style={{ background: '#fee2e2', color: '#ef4444', fontWeight: 700, padding: '4px 10px', borderRadius: '12px' }}>
@@ -264,9 +271,9 @@ export default function Admin() {
                       alignItems: 'center', 
                       justifyContent: 'space-between', 
                       padding: '14px 20px', 
-                      background: '#f8fafc', 
+                      background: theme === 'dark' ? 'rgba(255, 255, 255, 0.02)' : '#f8fafc', 
                       borderRadius: '12px', 
-                      border: '1px solid #e2e8f0',
+                      border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid #e2e8f0',
                       transition: 'all 0.2s ease'
                     }}
                   >
@@ -275,12 +282,12 @@ export default function Admin() {
                         {sol.rol === 'tecnico' ? '🛠️' : '🔍'}
                       </span>
                       <div>
-                        <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>{sol.usuario}</span>
+                        <span style={{ fontSize: '0.95rem', fontWeight: 700, color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>{sol.usuario}</span>
                         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
                           <span className={`badge-station-status ${sol.rol === 'tecnico' ? 'buena' : 'excelente'}`} style={{ fontSize: '0.72rem', padding: '3px 8px', borderRadius: '20px', fontWeight: 600 }}>
                             {sol.rol === 'tecnico' ? 'Técnico' : 'Consultor'}
                           </span>
-                          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Solicitado el {sol.fecha}</span>
+                          <span style={{ fontSize: '0.75rem', color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>Solicitado el {sol.fecha}</span>
                         </div>
                       </div>
                     </div>
@@ -321,7 +328,11 @@ export default function Admin() {
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <button
                   className="btn-action"
-                  style={{ background: '#f1f5f9', color: '#0369a1', border: '1px solid #bae6fd' }}
+                  style={{ 
+                    background: theme === 'dark' ? 'rgba(255, 255, 255, 0.04)' : '#f1f5f9', 
+                    color: theme === 'dark' ? '#00d2ff' : '#0369a1', 
+                    border: theme === 'dark' ? '1px solid rgba(0, 210, 255, 0.2)' : '1px solid #bae6fd' 
+                  }}
                   onClick={() => navigate('/inventario')}
                 >
                   Ver todos
