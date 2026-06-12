@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoNodos from '../components/FondoParticulas';
+import FondoEstrellas from '../components/FondoEstrellas';
+import FondoClaro from '../components/FondoViento';
 import '../styles/CreacionUsuarios.css';
 
 export default function CreacionUsuarios() {
@@ -15,6 +17,27 @@ export default function CreacionUsuarios() {
   const [mostrarPassword, setMostrarPassword] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [alerta, setAlerta] = useState<{ tipo: 'success' | 'error'; mensaje: string } | null>(null);
+
+  // Estado para el tipo de fondo: 'auto' | 'particulas' | 'estrellas' | 'viento'
+  const [backgroundType, setBackgroundType] = useState<'auto' | 'particulas' | 'estrellas' | 'viento'>('auto');
+
+  // Determinar qué fondo y tema usar
+  const resolvedBackground = backgroundType === 'auto'
+    ? (formData.rol === 'tecnico' ? 'particulas' : 'estrellas')
+    : backgroundType;
+
+  const getThemeClass = () => {
+    switch (resolvedBackground) {
+      case 'particulas':
+        return 'liquid-theme';
+      case 'estrellas':
+        return 'consultor-theme';
+      case 'viento':
+        return 'light-theme';
+      default:
+        return 'liquid-theme';
+    }
+  };
 
   const manejarCambio = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -68,8 +91,26 @@ export default function CreacionUsuarios() {
     setCargando(true);
     console.log('Registrando nuevo usuario:', formData);
 
-    // Simulación de guardado
+    // Guardado y persistencia en localStorage
     setTimeout(() => {
+      try {
+        const usuariosExistentesRaw = localStorage.getItem('usuarios_inamhi');
+        const usuariosExistentes = usuariosExistentesRaw ? JSON.parse(usuariosExistentesRaw) : [];
+        
+        const nuevoUsuario = {
+          id: Date.now(),
+          nombreCompleto: formData.nombreCompleto.trim(),
+          usuario: formData.usuario.trim(),
+          password: formData.password,
+          rol: formData.rol,
+          activo: formData.activo
+        };
+        
+        localStorage.setItem('usuarios_inamhi', JSON.stringify([...usuariosExistentes, nuevoUsuario]));
+      } catch (error) {
+        console.error('Error al guardar el nuevo usuario en localStorage:', error);
+      }
+
       setCargando(false);
       setAlerta({
         tipo: 'success',
@@ -84,14 +125,68 @@ export default function CreacionUsuarios() {
   };
 
   return (
-    <div className="creacion-usuarios-container liquid-theme">
-      {/* Fondo de partículas animado y luces ambientales */}
-      <FondoNodos />
-      <div className="ambient-light light-1"></div>
-      <div className="ambient-light light-2"></div>
+    <div className={`creacion-usuarios-container ${getThemeClass()}`}>
+      {/* Fondo y luces dinámicas */}
+      {resolvedBackground === 'particulas' && (
+        <>
+          <FondoNodos />
+          <div className="ambient-light light-1"></div>
+          <div className="ambient-light light-2"></div>
+        </>
+      )}
+      {resolvedBackground === 'estrellas' && (
+        <>
+          <FondoEstrellas />
+          <div className="ambient-light light-1-consultor"></div>
+          <div className="ambient-light light-2-consultor"></div>
+        </>
+      )}
+      {resolvedBackground === 'viento' && (
+        <>
+          <FondoClaro />
+        </>
+      )}
 
       <div className="centered-wrapper">
         <div className="creacion-usuarios-card liquid-glass">
+          {/* Selector de Fondo flotante en la esquina superior derecha */}
+          <div className="bg-selector-floating">
+            <span className="bg-selector-label" title="Cambiar tema de fondo">Fondo:</span>
+            <div className="bg-selector-buttons">
+              <button
+                type="button"
+                className={`bg-btn ${backgroundType === 'auto' ? 'active' : ''}`}
+                onClick={() => setBackgroundType('auto')}
+                title="Sincronizar con el Rol seleccionado"
+              >
+                🔄
+              </button>
+              <button
+                type="button"
+                className={`bg-btn ${backgroundType === 'particulas' ? 'active' : ''}`}
+                onClick={() => setBackgroundType('particulas')}
+                title="Partículas de Nodos (Oscuro)"
+              >
+                🌀
+              </button>
+              <button
+                type="button"
+                className={`bg-btn ${backgroundType === 'estrellas' ? 'active' : ''}`}
+                onClick={() => setBackgroundType('estrellas')}
+                title="Estrellas del Cosmos (Oscuro)"
+              >
+                ✨
+              </button>
+              <button
+                type="button"
+                className={`bg-btn ${backgroundType === 'viento' ? 'active' : ''}`}
+                onClick={() => setBackgroundType('viento')}
+                title="Viento Dinámico (Claro)"
+              >
+                💨
+              </button>
+            </div>
+          </div>
           {/* Botón para volver al Dashboard */}
           <button
             type="button"

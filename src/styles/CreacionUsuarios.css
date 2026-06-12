@@ -656,4 +656,378 @@
     padding: 14px;
     font-size: 0.95rem;
   }
+
+  .bg-selector-floating {
+    top: 15px;
+    right: 15px;
+    padding: 3px 6px;
+    border-radius: 10px;
+  }
+  
+  .bg-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 0.85rem;
+  }
+  
+  .bg-selector-label {
+    display: none;
+  }
+}
+
+/* --- TEMA CÓSMICO (CONSULTOR) PARA CREACIÓN DE USUARIOS --- */
+.creacion-usuarios-container.consultor-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #020208 0%, #080d21 50%, #12061e 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.consultor-theme .creacion-usuarios-card.liquid-glass {
+  background: linear-gradient(135deg, rgba(18, 6, 30, 0.45) 0%, rgba(2, 2, 8, 0.75) 100%);
+  border: 1px solid rgba(188, 19, 254, 0.25);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
+              0 0 30px rgba(188, 19, 254, 0.15), 
+              0 0 15px rgba(255, 183, 77, 0.08), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+.consultor-theme .text-gradient-aqua {
+  background: linear-gradient(to right, #bc13fe, #ffb74d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.consultor-theme .card-subtitle {
+  color: #e1bee7;
+}
+
+.consultor-theme .btn-back-admin {
+  background: rgba(18, 6, 30, 0.2);
+  border: 1px solid rgba(188, 19, 254, 0.2);
+  color: #e1bee7;
+}
+
+.consultor-theme .btn-back-admin:hover {
+  background: rgba(188, 19, 254, 0.15);
+  border-color: #ffb74d;
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 183, 77, 0.25);
+}
+
+.consultor-theme .input-group label {
+  color: #e1bee7;
+}
+
+.consultor-theme .input-with-icon input,
+.consultor-theme .password-wrapper input {
+  background: rgba(18, 6, 30, 0.35);
+  border: 1px solid rgba(188, 19, 254, 0.25);
+}
+
+.consultor-theme .input-with-icon input:focus,
+.consultor-theme .password-wrapper input:focus {
+  background: rgba(18, 6, 30, 0.55);
+  border-color: #ffb74d;
+  box-shadow: 0 0 15px rgba(255, 183, 77, 0.25);
+}
+
+.consultor-theme .password-toggle:hover {
+  color: #ffb74d;
+}
+
+/* Luces para tema cósmico */
+.light-1-consultor {
+  width: 450px;
+  height: 450px;
+  background: rgba(255, 183, 77, 0.15);
+  top: 15%;
+  left: 20%;
+  filter: blur(120px);
+  opacity: 0.55;
+  position: absolute;
+  z-index: 1;
+  animation: floatLight 12s infinite alternate ease-in-out;
+}
+
+.light-2-consultor {
+  width: 500px;
+  height: 500px;
+  background: rgba(188, 19, 254, 0.14);
+  bottom: 8%;
+  right: 15%;
+  filter: blur(140px);
+  opacity: 0.55;
+  position: absolute;
+  z-index: 1;
+  animation: floatLight 10s infinite alternate ease-in-out -5s;
+}
+
+/* --- TEMA CLARO PARA CREACIÓN DE USUARIOS --- */
+.creacion-usuarios-container.light-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #f8fafc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.light-theme .creacion-usuarios-card.liquid-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(14, 165, 233, 0.15);
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.08), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.light-theme .card-title {
+  color: #0f172a;
+}
+
+.light-theme .text-gradient-aqua {
+  background: linear-gradient(to right, #0284c7, #0ea5e9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.light-theme .card-subtitle {
+  color: #64748b;
+}
+
+.light-theme .btn-back-admin {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #cbd5e1;
+  color: #475569;
+}
+
+.light-theme .btn-back-admin:hover {
+  background: #f1f5f9;
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+
+.light-theme .inamhi-logo-liquid {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+}
+
+.light-theme .input-group label {
+  color: #475569;
+}
+
+.light-theme .input-with-icon input,
+.light-theme .password-wrapper input {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.light-theme .input-with-icon input::placeholder,
+.light-theme .password-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.light-theme .input-with-icon input:focus,
+.light-theme .password-wrapper input:focus {
+  background: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+}
+
+.light-theme .password-toggle {
+  color: #94a3b8;
+}
+
+.light-theme .password-toggle:hover {
+  color: #0ea5e9;
+}
+
+.light-theme .role-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.light-theme .role-card:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.light-theme .role-card.active {
+  background: #f0f9ff;
+  border-color: #0ea5e9;
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.1);
+}
+
+.light-theme .role-icon-wrapper {
+  background: #f1f5f9;
+}
+
+.light-theme .role-card.active .role-icon-wrapper {
+  background: #e0f2fe;
+}
+
+.light-theme .role-title {
+  color: #0f172a;
+}
+
+.light-theme .role-desc {
+  color: #64748b;
+}
+
+.light-theme .role-radio-bullet {
+  border-color: #cbd5e1;
+}
+
+.light-theme .role-card.active .role-radio-bullet {
+  border-color: #0ea5e9;
+  background: #0ea5e9;
+}
+
+.light-theme .role-card.active .role-radio-bullet::after {
+  background: #ffffff;
+}
+
+.light-theme .toggle-group {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.light-theme .toggle-main-label {
+  color: #0f172a;
+}
+
+.light-theme .toggle-sub-label {
+  color: #64748b;
+}
+
+.light-theme .custom-toggle-switch {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+.light-theme .custom-toggle-switch.activo {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.light-theme .custom-toggle-switch.inactivo {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.light-theme .custom-toggle-switch.activo .toggle-text {
+  color: #16a34a;
+}
+
+.light-theme .custom-toggle-switch.inactivo .toggle-text {
+  color: #dc2626;
+}
+
+.light-theme .custom-toggle-switch.inactivo .toggle-thumb {
+  background: #cbd5e1;
+}
+
+.light-theme .btn-cancel {
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.light-theme .btn-cancel:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+/* --- SELECTOR DE FONDO FLOTANTE --- */
+.bg-selector-floating {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 14px;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.light-theme .bg-selector-floating {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.bg-selector-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--white-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.light-theme .bg-selector-label {
+  color: #475569;
+}
+
+.bg-selector-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.bg-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bg-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.1);
+}
+
+.light-theme .bg-btn:hover {
+  background: #f1f5f9;
+}
+
+.bg-btn.active {
+  background: rgba(0, 210, 255, 0.15);
+  border: 1px solid var(--aqua-primary);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.25);
+}
+
+.light-theme .bg-btn.active {
+  background: #e0f2fe;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
+}
+
+.consultor-theme .bg-btn.active {
+  background: rgba(188, 19, 254, 0.15);
+  border-color: #bc13fe;
+  box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
 }

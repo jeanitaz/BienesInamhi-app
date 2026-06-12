@@ -1,9 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import type { Engine } from "tsparticles-engine";
 
-const FondoExtravagante = () => {
+const FondoExtravagante = memo(() => {
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadFull(engine);
   }, []);
@@ -65,7 +65,7 @@ const FondoExtravagante = () => {
             },
           },
           collisions: {
-            enable: true, // Rebotan entre sí
+            enable: false, // DESHABILITADO: Rebotar entre sí consume demasiada CPU (O(N^2))
           },
           move: {
             direction: "none",
@@ -117,6 +117,6 @@ const FondoExtravagante = () => {
       }}
     />
   );
-};
+});
 
 export default FondoExtravagante;

@@ -422,3 +422,186 @@
     justify-content: flex-start;
   }
 }
+
+/* ==========================================================================
+   TEMA CLARO (LIGHT THEME) PARA REGISTRO DE BIENES
+   ========================================================================== */
+
+.registro-bien-container.light-theme {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 40px 20px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #f1f5f9;
+  color: #2c3e50;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* Tarjeta del Formulario en Tema Claro */
+.registro-bien-container.light-theme .registro-bien-card.liquid-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 35px;
+  box-shadow: 0 15px 35px rgba(10, 66, 117, 0.05), 0 1px 3px rgba(10, 66, 117, 0.02);
+  color: #2c3e50;
+}
+
+/* Botón Volver */
+.registro-bien-container.light-theme .btn-back-general {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #475569;
+}
+
+.registro-bien-container.light-theme .btn-back-general:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #0a4275;
+  color: #0a4275;
+  box-shadow: 0 4px 12px rgba(10, 66, 117, 0.08);
+}
+
+/* Títulos y Subtítulos */
+.registro-bien-container.light-theme .registro-bien-card .card-title {
+  color: #0a4275;
+}
+
+.registro-bien-container.light-theme .registro-bien-card .card-subtitle {
+  color: #607d8b;
+}
+
+/* Subtítulos de Sección */
+.registro-bien-container.light-theme .section-title {
+  color: #0a4275;
+  border-bottom-color: rgba(10, 66, 117, 0.12);
+}
+
+/* Contenedores de Input y Labels */
+.registro-bien-container.light-theme .input-group label {
+  color: #475569;
+}
+
+/* Checkbox marcador (No tiene) */
+.registro-bien-container.light-theme .checkbox-marker span {
+  color: #1e88e5 !important;
+}
+
+.registro-bien-container.light-theme .checkbox-marker input[type="checkbox"] {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+}
+
+.registro-bien-container.light-theme .checkbox-marker input[type="checkbox"]:checked {
+  background: #1e88e5;
+  border-color: #1e88e5;
+}
+
+/* Inputs, Selects y Textareas en Tema Claro */
+.registro-bien-container.light-theme .input-group input,
+.registro-bien-container.light-theme .input-group select,
+.registro-bien-container.light-theme .input-group textarea {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #2c3e50;
+}
+
+.registro-bien-container.light-theme .input-group select option {
+  background-color: #ffffff;
+  color: #2c3e50;
+}
+
+.registro-bien-container.light-theme .input-group input::placeholder,
+.registro-bien-container.light-theme .input-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Foco en inputs */
+.registro-bien-container.light-theme .input-group input:focus:not(:disabled),
+.registro-bien-container.light-theme .input-group select:focus:not(:disabled),
+.registro-bien-container.light-theme .input-group textarea:focus:not(:disabled) {
+  background: #ffffff;
+  border-color: #1e88e5;
+  box-shadow: 0 0 10px rgba(30, 136, 229, 0.15);
+}
+
+/* Deshabilitados */
+.registro-bien-container.light-theme .input-group input:disabled,
+.registro-bien-container.light-theme .input-group select:disabled,
+.registro-bien-container.light-theme .input-group textarea:disabled {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.04);
+  color: #94a3b8;
+}
+
+/* Asistentes de Formato */
+.registro-bien-container.light-theme .text-success { color: #2e7d32; }
+.registro-bien-container.light-theme .text-danger { color: #dc2626; }
+
+/* Grid de Estados Card Badges */
+.registro-bien-container.light-theme .estado-badge-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #475569;
+}
+
+/* Estados Inactivos Hover */
+.registro-bien-container.light-theme .estado-badge-card:hover {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+/* Estados Activos */
+.registro-bien-container.light-theme .estado-badge-card.bueno.active {
+  background: #e8f5e9;
+  border-color: #2e7d32;
+  color: #2e7d32;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.12);
+}
+
+.registro-bien-container.light-theme .estado-badge-card.regular.active {
+  background: #fff3e0;
+  border-color: #ef6c00;
+  color: #ef6c00;
+  box-shadow: 0 4px 12px rgba(239, 108, 0, 0.12);
+}
+
+.registro-bien-container.light-theme .estado-badge-card.malo.active {
+  background: #ffebee;
+  border-color: #c62828;
+  color: #c62828;
+  box-shadow: 0 4px 12px rgba(198, 40, 40, 0.12);
+}
+
+/* Botón Cancelar */
+.registro-bien-container.light-theme .btn-cancel {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+.registro-bien-container.light-theme .btn-cancel:hover:not(:disabled) {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* Botón Enviar */
+.registro-bien-container.light-theme .btn-submit.btn-liquid {
+  background: linear-gradient(135deg, #0a4275, #1e88e5);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(10, 66, 117, 0.12);
+}
+
+.registro-bien-container.light-theme .btn-submit.btn-liquid:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0d5494, #2196f3);
+  box-shadow: 0 10px 24px rgba(10, 66, 117, 0.2);
+}
+
+

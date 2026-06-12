@@ -1,0 +1,233 @@
+/* --- CONTENEDOR BASE DE RECUPERACIÓN DE CONTRASEÑA --- */
+.contra-container {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contra-container.liquid-theme {
+  background-color: #030b14;
+}
+
+.contra-container.consultor-theme {
+  background: linear-gradient(135deg, #020208 0%, #080d21 50%, #12061e 100%);
+}
+
+/* Tarjeta del Formulario */
+.contra-card.liquid-glass {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.01));
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 35px;
+  padding: 60px 40px 45px 40px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.consultor-theme .contra-card.liquid-glass {
+  background: linear-gradient(135deg, rgba(18, 6, 30, 0.45) 0%, rgba(2, 2, 8, 0.75) 100%);
+  border: 1px solid rgba(188, 19, 254, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 
+              0 0 30px rgba(188, 19, 254, 0.15), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+
+.contra-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  line-height: 1.25;
+}
+
+.contra-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.92rem;
+  font-weight: 300;
+  margin: 0 0 25px 0;
+  line-height: 1.45;
+}
+
+.contra-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Alertas de error */
+.contra-error-alert {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.contra-error-alert p {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+/* Notas de información flotante */
+.contra-info-note {
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  padding: 12px 16px;
+  border-radius: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+}
+
+.consultor-theme .contra-info-note {
+  background: rgba(188, 19, 254, 0.06);
+  border-color: rgba(188, 19, 254, 0.2);
+}
+
+.info-icon {
+  font-size: 1.1rem;
+}
+
+.contra-info-note p {
+  margin: 0;
+  color: rgba(224, 242, 254, 0.85);
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.consultor-theme .contra-info-note p {
+  color: #e1bee7;
+}
+
+/* Estado de Éxito */
+.contra-success-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.success-icon-wrapper {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(16, 185, 129, 0.15);
+  border-radius: 50%;
+  animation: expandPulse 2s infinite ease-out;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35);
+  z-index: 2;
+}
+
+.contra-success-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  font-weight: 300;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+}
+
+/* Insignia del usuario recuperado */
+.user-success-badge {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 14px 24px;
+  width: 100%;
+  margin-bottom: 24px;
+  gap: 4px;
+}
+
+.user-success-role {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.user-success-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.contra-success-footer-note {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.78rem;
+  font-weight: 300;
+  line-height: 1.45;
+  margin: 0 0 30px 0;
+}
+
+@keyframes expandPulse {
+  0% { transform: scale(0.9); opacity: 0.85; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Responsividad para móviles */
+@media (max-width: 576px) {
+  .contra-card.liquid-glass {
+    padding: 50px 24px 30px 24px;
+    border-radius: 25px;
+  }
+
+  .contra-title {
+    font-size: 1.5rem;
+  }
+
+  .contra-subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+
+  .user-success-badge {
+    padding: 10px 16px;
+    border-radius: 12px;
+  }
+
+  .user-success-name {
+    font-size: 0.95rem;
+  }
+}

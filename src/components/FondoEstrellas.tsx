@@ -1,9 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import type { Engine } from "tsparticles-engine";
 
-const FondoEstrellas = () => {
+const FondoEstrellas = memo(() => {
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadFull(engine);
   }, []);
@@ -110,6 +110,6 @@ const FondoEstrellas = () => {
       }}
     />
   );
-};
+});
 
 export default FondoEstrellas;

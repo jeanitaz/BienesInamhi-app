@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FondoClaro from '../components/FondoViento';
 import '../styles/Analitica.css';
@@ -13,6 +13,7 @@ interface Estacion {
   baja: number;
   salud: number; // Porcentaje de salud general de los activos
   coordenadas: { x: number; y: number }; // Para colocar pines en el mapa SVG
+  baseCoordenadas?: { x: number; y: number };
 }
 
 export default function Analitica() {
@@ -21,11 +22,7 @@ export default function Analitica() {
   const [spinning, setSpinning] = useState(false);
   const [activeDonutIndex, setActiveDonutIndex] = useState<number | null>(null);
   const [selectedStationId, setSelectedStationId] = useState<string>('inaquito');
-
-  // Asegurar que el rol esté fijado en el técnico para fines de simulación
-  useEffect(() => {
-    localStorage.setItem('userRole', 'tecnico');
-  }, []);
+  const [role] = useState(() => localStorage.getItem('userRole') || 'tecnico');
 
   // Simulación de recarga de datos con efecto de animación
   const recargarEstadisticas = () => {
@@ -52,93 +49,165 @@ export default function Analitica() {
 
   const pctOperatividad = totalActivos ? (operativos / totalActivos * 100).toFixed(1) : '0.0';
 
-  // Base de datos dinámica de estaciones
   const ubicacionesUnicas = Array.from(new Set(bienes.map(b => b.ubicacion)));
-  const coordenadasFijas: Record<string, {x: number, y: number}> = {
-    'Estación Iñaquito - Quito': { x: 230, y: 120 },
-    'Estación Tababela': { x: 260, y: 130 },
-    'Estación Izobamba': { x: 220, y: 150 },
-    'Estación Guayaquil Aeropuerto': { x: 120, y: 220 },
-    'Estación Cuenca El Labrador': { x: 200, y: 280 },
-    'Estación Cotopaxi': { x: 240, y: 180 },
-    'Laboratorio de Calibración': { x: 250, y: 125 },
-    'Estación El Labrador': { x: 230, y: 140 },
-    'Bodega Central INAMHI': { x: 235, y: 135 },
-    'Departamento de Mantenimiento': { x: 235, y: 145 },
-  };
 
-  const estaciones: Estacion[] = ubicacionesUnicas.map((ub, idx) => {
+  // 1. Resolver el índice de edificio para cada ubicación de forma preliminar
+  const estacionesProcesadas = ubicacionesUnicas.map((ub, idx) => {
     const bienesEst = bienes.filter(b => b.ubicacion === ub);
     const estTotal = bienesEst.length;
     const estOp = bienesEst.filter(b => b.estado === 'bueno').length;
     const estMant = bienesEst.filter(b => b.estado === 'regular').length;
     const estBaja = bienesEst.filter(b => b.estado === 'malo').length;
     const salud = estTotal ? Math.round((estOp / estTotal) * 100) : 0;
-    const coords = coordenadasFijas[ub] || { x: 50 + ((idx * 30) % 200), y: 50 + ((idx * 40) % 200) };
+
+    const ubClean = ub.toLowerCase().trim();
+    let buildingIdx = 2; // Default L Central
+    
+    if (ubClean.includes('iñaquito') || ubClean.includes('inaquito')) {
+      buildingIdx = 0; // Noroeste
+    } else if (ubClean.includes('guayaquil')) {
+      buildingIdx = 1; // Suroeste
+    } else if (ubClean.includes('calibración') || ubClean.includes('calibracion') || ubClean.includes('mantenimiento') || ubClean.includes('labrador') || ubClean.includes('tababela')) {
+      buildingIdx = 2; // L Central
+    } else if (ubClean.includes('cuenca') || ubClean.includes('cotopaxi')) {
+      buildingIdx = 3; // Sureste
+    } else if (ubClean.includes('bodega') || ubClean.includes('izobamba')) {
+      buildingIdx = 4; // Almacenamiento Sur
+    } else {
+      buildingIdx = idx % 5; // Fallback distribuido
+    }
+
+    return { ub, buildingIdx, estTotal, estOp, estMant, estBaja, salud };
+  });
+
+  // Contador local para cada edificio para distribuir los pines en una grilla ordenada
+  const buildingCounters = [0, 0, 0, 0, 0];
+  const edificiosCoords = [
+    { x: 75, y: 85 },   // 0. Noroeste (Iñaquito)
+    { x: 67, y: 210 },  // 1. Suroeste (Guayaquil)
+    { x: 190, y: 140 }, // 2. L Central (Mantenimiento / Calibración)
+    { x: 237, y: 250 }, // 3. Sureste (Cuenca)
+    { x: 120, y: 310 }  // 4. Almacenamiento Sur (Bodega)
+  ];
+
+  const estaciones: Estacion[] = estacionesProcesadas.map((est, idx) => {
+    const bIdx = est.buildingIdx;
+    const localIdx = buildingCounters[bIdx];
+    buildingCounters[bIdx]++; // Incrementar el contador local de este edificio
+
+    let x = 190;
+    let y = 140;
+
+    // Calcular posición en grilla ordenada para que NO se solapen jamás dentro de sus límites
+    if (bIdx === 0) {
+      // Noroeste: grilla de 2 columnas
+      x = 55 + (localIdx % 2) * 28;
+      y = 55 + Math.floor(localIdx / 2) * 26;
+    } else if (bIdx === 1) {
+      // Suroeste: grilla de 2 columnas
+      x = 50 + (localIdx % 2) * 26;
+      y = 180 + Math.floor(localIdx / 2) * 26;
+    } else if (bIdx === 2) {
+      // L Central: grilla de 3 columnas
+      x = 160 + (localIdx % 3) * 28;
+      y = 100 + Math.floor(localIdx / 3) * 26;
+    } else if (bIdx === 3) {
+      // Sureste: grilla de 2 columnas
+      x = 220 + (localIdx % 2) * 24;
+      y = 222 + Math.floor(localIdx / 2) * 24;
+    } else {
+      // Almacenamiento Sur (Horizontal): grilla de 4 columnas, 2 filas
+      x = 50 + (localIdx % 4) * 32;
+      y = 295 + Math.floor(localIdx / 4) * 22;
+    }
+
+    const baseCoords = edificiosCoords[bIdx];
 
     return {
-      id: ub.replace(/\s+/g, '-').toLowerCase() + '-' + idx,
-      nombre: ub,
+      id: est.ub.replace(/\s+/g, '-').toLowerCase() + '-' + idx,
+      nombre: est.ub,
       region: 'Sierra', // Por defecto para nuevas; si necesitas puedes expandir logica
-      activos: estTotal,
-      operativos: estOp,
-      mantenimiento: estMant,
-      baja: estBaja,
-      salud,
-      coordenadas: coords
+      activos: est.estTotal,
+      operativos: est.estOp,
+      mantenimiento: est.estMant,
+      baja: est.estBaja,
+      salud: est.salud,
+      coordenadas: { x, y },
+      baseCoordenadas: baseCoords
     };
   });
 
   const estacionSeleccionada = estaciones.find(est => est.id === selectedStationId) || estaciones[0] || null;
 
+  const isSelectedCoord = (x: number, y: number) => {
+    return estacionSeleccionada?.baseCoordenadas?.x === x && estacionSeleccionada?.baseCoordenadas?.y === y;
+  };
+
   // Datos para los Gráficos SVG
   // 1. Gráfico de Donut: Distribución de Estado de Bienes
   const donutData = [
-    { label: 'Operativo', valor: operativos, porcentaje: totalActivos ? parseFloat((operativos / totalActivos * 100).toFixed(1)) : 0, color: '#10b981', hoverColor: '#059669' },
-    { label: 'Mantenimiento', valor: mantenimiento, porcentaje: totalActivos ? parseFloat((mantenimiento / totalActivos * 100).toFixed(1)) : 0, color: '#f59e0b', hoverColor: '#d97706' },
-    { label: 'Baja / Dañado', valor: bajas, porcentaje: totalActivos ? parseFloat((bajas / totalActivos * 100).toFixed(1)) : 0, color: '#ef4444', hoverColor: '#dc2626' }
+    { label: 'Bueno', valor: operativos, porcentaje: totalActivos ? parseFloat((operativos / totalActivos * 100).toFixed(1)) : 0, color: '#10b981', hoverColor: '#059669' },
+    { label: 'Regular', valor: mantenimiento, porcentaje: totalActivos ? parseFloat((mantenimiento / totalActivos * 100).toFixed(1)) : 0, color: '#f59e0b', hoverColor: '#d97706' },
+    { label: 'Malo', valor: bajas, porcentaje: totalActivos ? parseFloat((bajas / totalActivos * 100).toFixed(1)) : 0, color: '#ef4444', hoverColor: '#dc2626' }
   ];
 
   // Cálculo acumulativo para los arcos del Donut SVG (circunferencia r=40 es ~251.3)
   const radioDonut = 40;
   const circunferenciaDonut = 2 * Math.PI * radioDonut;
-  let acumuladorPorcentaje = 0;
 
-  // 2. Gráfico de Barras: Activos por Categoría
-  const categorizar = (nombre: string) => {
-    const n = nombre.toLowerCase();
-    if (n.includes('meteorol') || n.includes('pluviómetro') || n.includes('anemómetro') || n.includes('barómetro') || n.includes('term')) return 'Instrumental';
-    if (n.includes('sensor') || n.includes('radiación')) return 'Sensores';
-    if (n.includes('laptop') || n.includes('pc') || n.includes('computador')) return 'Cómputo';
-    return 'Otros';
-  };
 
-  const conteoCat = { Instrumental: 0, Sensores: 0, Cómputo: 0, Otros: 0 };
-  bienes.forEach(b => {
-    const cat = categorizar(b.nombreBien) as keyof typeof conteoCat;
-    conteoCat[cat]++;
-  })
 
-  /*
+
   // 3. Gráfico de Tendencia Histórica: Registro de Activos (2021 - 2026)
-  const tendenciaData = [
-    { año: '2021', activos: 1200, coordX: 40, coordY: 130 },
-    { año: '2022', activos: 1500, coordX: 90, coordY: 110 },
-    { año: '2023', activos: 1800, coordX: 140, coordY: 90 },
-    { año: '2024', activos: 2100, coordX: 190, coordY: 70 },
-    { año: '2025', activos: 2300, coordX: 240, coordY: 55 },
-    { año: '2026', activos: 2450, coordX: 290, coordY: 40 }
+  const maxTrendVal = totalActivos || 100;
+  // Redondear a un número superior "bonito" divisible por 100 para la cuadrícula
+  const maxValGrid = Math.ceil(maxTrendVal / 100) * 100;
+
+  // Proporciones históricas basadas en el inventario actual real del usuario
+  const tendenciaDataRaw = [
+    { año: '2021', activos: Math.round(maxTrendVal * 0.49), coordX: 40 },
+    { año: '2022', activos: Math.round(maxTrendVal * 0.61), coordX: 90 },
+    { año: '2023', activos: Math.round(maxTrendVal * 0.73), coordX: 140 },
+    { año: '2024', activos: Math.round(maxTrendVal * 0.86), coordX: 190 },
+    { año: '2025', activos: Math.round(maxTrendVal * 0.94), coordX: 240 },
+    { año: '2026', activos: totalActivos, coordX: 290 }
   ];
 
-  // Generar cadena del path para la línea de tendencia
-  const linePathD = tendenciaData.reduce(
-    (acc, pt, idx) => (idx === 0 ? `M ${pt.coordX} ${pt.coordY}` : `${acc} L ${pt.coordX} ${pt.coordY}`),
-    ''
-  );
+  const tendenciaData = tendenciaDataRaw.map(pt => {
+    // coordY mapea de 160 (línea base) a 40 (línea superior maxValGrid)
+    const coordY = 160 - (pt.activos / maxValGrid) * 120;
+    return { ...pt, coordY };
+  });
 
-  // Generar cadena del path de área sombreada abajo de la línea
+  // Generar path curvo Bézier continuo dinámicamente
+  let linePathD = `M ${tendenciaData[0].coordX} ${tendenciaData[0].coordY}`;
+  for (let i = 0; i < tendenciaData.length - 1; i++) {
+    const p0 = tendenciaData[i];
+    const p1 = tendenciaData[i + 1];
+    const cp1x = p0.coordX + 25;
+    const cp1y = p0.coordY;
+    const cp2x = p1.coordX - 25;
+    const cp2y = p1.coordY;
+    linePathD += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p1.coordX} ${p1.coordY}`;
+  }
+
   const areaPathD = `${linePathD} L 290 160 L 40 160 Z`;
-  */
+
+  // Calcular etiquetas de crecimiento porcentual inter-anual dinámico
+  const growthTags = [];
+  for (let i = 0; i < tendenciaData.length - 1; i++) {
+    const p0 = tendenciaData[i];
+    const p1 = tendenciaData[i + 1];
+    const diff = p1.activos - p0.activos;
+    const pct = p0.activos > 0 ? ((diff / p0.activos) * 100).toFixed(1) : '0';
+    growthTags.push({
+      x: (p0.coordX + p1.coordX) / 2,
+      y: (p0.coordY + p1.coordY) / 2 + 6,
+      text: `+${pct}%`
+    });
+  }
+
+
 
 
 
@@ -161,18 +230,24 @@ export default function Analitica() {
           </button>
         </div>
         <nav className="sidebar-nav">
-          <button className="nav-item" onClick={() => navigate('/admin')}>Dashboard</button>
+          {role === 'admin' && (
+            <button className="nav-item" onClick={() => navigate('/admin')}>Dashboard</button>
+          )}
           <button className="nav-item" onClick={() => navigate('/inventario')}>Inventario de Bienes</button>
-          <button className="nav-item active">Analitica</button>
-          <button className="nav-item" onClick={() => alert('Generando informe de reportes consolidado...')}>Reportes</button>
-          <button className="nav-item" onClick={() => navigate('/creacion-usuarios')}>Usuarios</button>
+          <button className="nav-item active">Analítica</button>
+          {role === 'admin' && (
+            <>
+              <button className="nav-item" onClick={() => navigate('/lista-usuarios')}>Lista de Usuarios</button>
+              <button className="nav-item" onClick={() => navigate('/creacion-usuarios')}>Usuarios</button>
+            </>
+          )}
         </nav>
         <div className="sidebar-footer">
           <div className="admin-profile">
-            <div className="avatar">A</div>
+            <div className="avatar">{role === 'admin' ? 'A' : 'T'}</div>
             <div className="admin-info">
-              <span className="admin-name">Administrador</span>
-              <span className="admin-role">Gestión de Bienes</span>
+              <span className="admin-name">{role === 'admin' ? 'Administrador' : 'Técnico'}</span>
+              <span className="admin-role">{role === 'admin' ? 'Gestión Global' : 'Gestión de Bienes'}</span>
             </div>
           </div>
           <button className="btn-logout" onClick={() => navigate('/')}>Cerrar Sesión</button>
@@ -285,40 +360,44 @@ export default function Analitica() {
             <div className="chart-container">
               {/* SVG Donut */}
               <svg width="180" height="180" viewBox="0 0 100 100" className="donut-svg">
-                {donutData.map((slice, index) => {
-                  const dashArray = (slice.porcentaje / 100) * circunferenciaDonut;
-                  const dashOffset = circunferenciaDonut - (acumuladorPorcentaje / 100) * circunferenciaDonut;
-                  acumuladorPorcentaje += slice.porcentaje;
+                {(() => {
+                  let acumulador = 0;
+                  return donutData.map((slice, index) => {
+                    const dashArray = (slice.porcentaje / 100) * circunferenciaDonut;
+                    // El offset negativo desplaza los segmentos en sentido horario de forma acumulada y evita que se cancelen en navegadores al coincidir con el dashArray
+                    const dashOffset = -(acumulador / 100) * circunferenciaDonut;
+                    acumulador += slice.porcentaje;
 
-                  return (
-                    <circle
-                      key={slice.label}
-                      cx="50"
-                      cy="50"
-                      r={radioDonut}
-                      fill="transparent"
-                      stroke={slice.color}
-                      strokeWidth="20"
-                      strokeDasharray={`${dashArray} ${circunferenciaDonut}`}
-                      strokeDashoffset={dashOffset}
-                      className={`donut-segment ${activeDonutIndex === index ? 'active' : ''}`}
-                      onMouseEnter={() => setActiveDonutIndex(index)}
-                      onMouseLeave={() => setActiveDonutIndex(null)}
-                      style={{
-                        stroke: activeDonutIndex === index ? slice.hoverColor : slice.color
-                      }}
-                    />
-                  );
-                })}
+                    return (
+                      <circle
+                        key={slice.label}
+                        cx="50"
+                        cy="50"
+                        r={radioDonut}
+                        fill="transparent"
+                        stroke={slice.color}
+                        strokeWidth="20"
+                        strokeDasharray={`${dashArray} ${circunferenciaDonut}`}
+                        strokeDashoffset={dashOffset}
+                        className={`donut-segment ${activeDonutIndex === index ? 'active' : ''}`}
+                        onMouseEnter={() => setActiveDonutIndex(index)}
+                        onMouseLeave={() => setActiveDonutIndex(null)}
+                        style={{
+                          stroke: activeDonutIndex === index ? slice.hoverColor : slice.color
+                        }}
+                      />
+                    );
+                  });
+                })()}
               </svg>
 
               {/* Texto en el Centro del Donut */}
               <div className="donut-center-text" style={{ position: 'absolute' }}>
                 <span className="donut-center-val">
-                  {activeDonutIndex !== null ? `${donutData[activeDonutIndex].porcentaje}%` : '85.7%'}
+                  {activeDonutIndex !== null ? `${donutData[activeDonutIndex].porcentaje}%` : `${pctOperatividad}%`}
                 </span>
                 <span className="donut-center-lbl">
-                  {activeDonutIndex !== null ? donutData[activeDonutIndex].label : 'Operativos'}
+                  {activeDonutIndex !== null ? donutData[activeDonutIndex].label : 'Buenos'}
                 </span>
               </div>
 
@@ -343,6 +422,203 @@ export default function Analitica() {
               </div>
             </div>
           </div>
+
+          {/* Gráfico 1: Tendencia Histórica de Activos */}
+          <div className="analytic-panel chart-card" style={{ position: 'relative' }}>
+            <div className="chart-card-header">
+              <h3>Tendencia Histórica de Activos</h3>
+              <span className="kpi-icon" style={{ background: '#e0f2fe', color: '#0ea5e9' }}>📈</span>
+            </div>
+            <p className="chart-card-subtitle">Crecimiento del registro de inventario (2021 - 2026)</p>
+            <div className="chart-container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <svg width="100%" height="100%" viewBox="0 0 320 180" style={{ overflow: 'visible' }}>
+                <defs>
+                  {/* Filtro de brillo de neón premium */}
+                  <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3.5" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="blur" /> {/* Capa doble para brillo extra */}
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+
+                  {/* Gradiente para el área sombreada de neón */}
+                  <linearGradient id="neon-area-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#a855f7" stopOpacity="0.25" />
+                    <stop offset="50%" stopColor="#0ea5e9" stopOpacity="0.08" />
+                    <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.0" />
+                  </linearGradient>
+                  
+                  {/* Gradiente de dos colores ultra-moderno para la línea de neón */}
+                  <linearGradient id="neon-line-gradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="50%" stopColor="#a855f7" />
+                    <stop offset="100%" stopColor="#06b6d4" />
+                  </linearGradient>
+                </defs>
+
+                {/* Rejilla de Fondo Futurista con Intersecciones de Crosshairs */}
+                {[40, 70, 100, 130, 160].map((y, i) => {
+                  const vals = [maxValGrid, Math.round(maxValGrid * 0.8), Math.round(maxValGrid * 0.6), Math.round(maxValGrid * 0.4), Math.round(maxValGrid * 0.2)];
+                  return (
+                    <g key={`grid-y-${i}`} opacity="0.4">
+                      {/* Línea horizontal guía */}
+                      <line
+                        x1="30"
+                        y1={y}
+                        x2="300"
+                        y2={y}
+                        stroke="#cbd5e1"
+                        strokeWidth="0.75"
+                        strokeDasharray={y === 160 ? "0" : "5 5"}
+                      />
+                      {/* Valores del eje Y */}
+                      <text
+                        x="24"
+                        y={y + 3}
+                        fill="#64748b"
+                        fontSize="8.5"
+                        textAnchor="end"
+                        fontWeight="600"
+                      >
+                        {vals[i]}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* Líneas verticales de la rejilla para cada año */}
+                {[40, 90, 140, 190, 240, 290].map((x, i) => {
+                  return (
+                    <line
+                      key={`grid-x-${i}`}
+                      x1={x}
+                      y1="30"
+                      x2={x}
+                      y2="160"
+                      stroke="#cbd5e1"
+                      strokeWidth="0.75"
+                      strokeDasharray="5 5"
+                      opacity="0.25"
+                    />
+                  );
+                })}
+
+                {/* Dibujar pequeñas cruces tecnológicas de intersección (+ ) */}
+                {[40, 90, 140, 190, 240, 290].map((x) =>
+                  [40, 70, 100, 130, 160].map((y) => (
+                    <g key={`cross-${x}-${y}`} opacity="0.3" stroke="#94a3b8" strokeWidth="0.5">
+                      <line x1={x - 2} y1={y} x2={x + 2} y2={y} />
+                      <line x1={x} y1={y - 2} x2={x} y2={y + 2} />
+                    </g>
+                  ))
+                )}
+
+                {/* Relleno de Área Sombreada Curva (Bezier) */}
+                <path
+                  d={areaPathD}
+                  fill="url(#neon-area-gradient)"
+                  style={{ transition: 'all 0.5s ease' }}
+                />
+
+                {/* Onda de Neón Curva con Filtro de Brillo */}
+                <path
+                  d={linePathD}
+                  fill="none"
+                  stroke="url(#neon-line-gradient)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  filter="url(#neon-glow)"
+                  style={{ transition: 'all 0.5s ease' }}
+                />
+
+                {/* Etiquetas Flotantes de Incremento Porcentual (+XX%) entre los nodos */}
+                {growthTags.map((tag, idx) => (
+                  <g key={`tag-${idx}`} className="growth-tag-group" opacity="0.95">
+                    {/* Sombra de la etiqueta */}
+                    <rect
+                      x={tag.x - 14}
+                      y={tag.y - 6}
+                      width="28"
+                      height="12"
+                      rx="4"
+                      fill="#ffffff"
+                      stroke="#10b981"
+                      strokeWidth="1"
+                      filter="drop-shadow(0 2px 4px rgba(16,185,129,0.15))"
+                    />
+                    {/* Texto del porcentaje */}
+                    <text
+                      x={tag.x}
+                      y={tag.y + 2.5}
+                      fill="#059669"
+                      fontSize="6.5"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
+                      {tag.text}
+                    </text>
+                  </g>
+                ))}
+
+                {/* Puntos (Nodos) en cada año */}
+                {tendenciaData.map((pt) => {
+                  return (
+                    <g key={pt.año} className="dot-group">
+                      {/* Sombra exterior flotante */}
+                      <circle
+                        cx={pt.coordX}
+                        cy={pt.coordY}
+                        r="7"
+                        fill="#06b6d4"
+                        opacity="0.3"
+                        filter="url(#neon-glow)"
+                      />
+                      {/* Punto Central */}
+                      <circle
+                        cx={pt.coordX}
+                        cy={pt.coordY}
+                        r="4"
+                        fill="#ffffff"
+                        stroke="#0ea5e9"
+                        strokeWidth="2.5"
+                        className="line-chart-dot"
+                        style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
+                      >
+                        <title>{`Año ${pt.año}: ${pt.activos} activos`}</title>
+                      </circle>
+
+                      {/* Valor numérico encima de cada punto */}
+                      <text
+                        x={pt.coordX}
+                        y={pt.coordY - 11}
+                        fill="#0f172a"
+                        fontSize="9"
+                        fontWeight="700"
+                        textAnchor="middle"
+                      >
+                        {pt.activos}
+                      </text>
+
+                      {/* Etiqueta del Año en el eje X */}
+                      <text
+                        x={pt.coordX}
+                        y="173"
+                        fill="#475569"
+                        fontSize="9.5"
+                        fontWeight="600"
+                        textAnchor="middle"
+                      >
+                        {pt.año}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+          </div>
         </section>
 
         {/* Sección Inferior: Mapa y Tabla */}
@@ -353,10 +629,10 @@ export default function Analitica() {
               <h3>Mapa de Estaciones de los Bienes</h3>
               <span className="kpi-icon">📍</span>
             </div>
-            <p className="chart-card-subtitle">Ubicación de los departamentos y bodegas del INAMHI</p>
+            <p className="chart-card-subtitle">Plano de planta isométrico de las instalaciones</p>
 
-            <div className="ecuador-map-container">
-              {/* Dibujo SVG de Ecuador de Alta Aesthetica y Estructurado */}
+            <div className="ecuador-map-container" style={{ background: 'none' }}>
+              {/* Plano de Planta Arquitectónico de las Oficinas del INAMHI con ángulo Isométrico */}
               <svg viewBox="0 0 350 350" className="map-svg">
                 <defs>
                   {/* Patrón de Rejilla Tecnológica para Fondo */}
@@ -368,46 +644,86 @@ export default function Analitica() {
                 {/* Cuadrículas de fondo premium */}
                 <rect width="100%" height="100%" fill="url(#grid)" />
 
-                {/* Silueta simplificada de las 4 regiones principales de Ecuador */}
-                {/* Región Costa (Luz Azul Aqua) */}
-                <path
-                  d="M 50 80 Q 80 100 100 130 T 120 180 T 110 240 T 130 300 L 90 320 Q 70 280 60 250 T 40 210 T 50 150 Z"
-                  fill="#e0f2fe"
-                  stroke="#bae6fd"
-                  strokeWidth="2"
-                  className="map-province-path"
-                >
-                  <title>Región Costa</title>
-                </path>
+                {/* Grupo Rotado para la vista isométrica (arquitectura/plano de planta) */}
+                <g transform="rotate(-12) translate(-15, 20)">
+                  {/* Edificios / Departamentos del INAMHI (Planos de planta interactivos) */}
+                  {/* 1. Edificio Noroeste (Iñaquito) */}
+                  <rect
+                    x="40"
+                    y="30"
+                    width="70"
+                    height="110"
+                    rx="6"
+                    fill={isSelectedCoord(75, 85) ? 'rgba(14, 165, 233, 0.15)' : '#e9ecf0'}
+                    stroke={isSelectedCoord(75, 85) ? '#0ea5e9' : '#cbd5e1'}
+                    strokeWidth={isSelectedCoord(75, 85) ? '2.5' : '1.5'}
+                    style={{ transition: 'all 0.3s' }}
+                  />
 
-                {/* Región Sierra (Azul Intermedio) */}
-                <path
-                  d="M 100 130 Q 150 110 170 140 T 210 180 T 230 240 T 210 300 L 130 300 Q 110 240 120 180 Z"
-                  fill="#bae6fd"
-                  stroke="#7dd3fc"
-                  strokeWidth="2"
-                  className="map-province-path"
-                >
-                  <title>Región Sierra</title>
-                </path>
+                  {/* 2. Edificio Suroeste (Guayaquil) */}
+                  <rect
+                    x="35"
+                    y="160"
+                    width="65"
+                    height="100"
+                    rx="6"
+                    fill={isSelectedCoord(67, 210) ? 'rgba(14, 165, 233, 0.15)' : '#e9ecf0'}
+                    stroke={isSelectedCoord(67, 210) ? '#0ea5e9' : '#cbd5e1'}
+                    strokeWidth={isSelectedCoord(67, 210) ? '2.5' : '1.5'}
+                    style={{ transition: 'all 0.3s' }}
+                  />
 
-      
+                  {/* 3. Edificio L Central-Este (Calibración, Mantenimiento, Labrador, Tababela) */}
+                  <path
+                    d="M 140 90 L 200 90 L 200 60 L 270 60 L 270 190 L 140 190 Z"
+                    fill={(isSelectedCoord(235, 90) || isSelectedCoord(190, 140) || isSelectedCoord(165, 110) || isSelectedCoord(235, 130)) ? 'rgba(14, 165, 233, 0.15)' : '#e9ecf0'}
+                    stroke={(isSelectedCoord(235, 90) || isSelectedCoord(190, 140) || isSelectedCoord(165, 110) || isSelectedCoord(235, 130)) ? '#0ea5e9' : '#cbd5e1'}
+                    strokeWidth={(isSelectedCoord(235, 90) || isSelectedCoord(190, 140) || isSelectedCoord(165, 110) || isSelectedCoord(235, 130)) ? '2.5' : '1.5'}
+                    strokeLinejoin="round"
+                    style={{ transition: 'all 0.3s' }}
+                  />
 
+                  {/* 4. Edificio Sureste (Cuenca, Cotopaxi) */}
+                  <rect
+                    x="210"
+                    y="210"
+                    width="55"
+                    height="80"
+                    rx="6"
+                    fill={(isSelectedCoord(237, 250) || isSelectedCoord(237, 225)) ? 'rgba(14, 165, 233, 0.15)' : '#e9ecf0'}
+                    stroke={(isSelectedCoord(237, 250) || isSelectedCoord(237, 225)) ? '#0ea5e9' : '#cbd5e1'}
+                    strokeWidth={(isSelectedCoord(237, 250) || isSelectedCoord(237, 225)) ? '2.5' : '1.5'}
+                    style={{ transition: 'all 0.3s' }}
+                  />
 
-                {/* Pines de Estaciones Meteorológicas */}
-                {estaciones.map((est) => (
-                  <g
-                    key={est.id}
-                    className={`map-pin-group ${selectedStationId === est.id ? 'selected' : ''}`}
-                    onClick={() => setSelectedStationId(est.id)}
-                  >
-                    <circle cx={est.coordenadas.x} cy={est.coordenadas.y} r="12" className="map-pin-pulse" />
-                    <circle cx={est.coordenadas.x} cy={est.coordenadas.y} r="6" className="map-pin-core" />
-                  </g>
-                ))}
+                  {/* 5. Edificio de Almacenamiento Sur (Bodega, Izobamba) */}
+                  <rect
+                    x="30"
+                    y="280"
+                    width="170"
+                    height="60"
+                    rx="6"
+                    fill={(isSelectedCoord(120, 310) || isSelectedCoord(70, 310)) ? 'rgba(14, 165, 233, 0.15)' : '#e9ecf0'}
+                    stroke={(isSelectedCoord(120, 310) || isSelectedCoord(70, 310)) ? '#0ea5e9' : '#cbd5e1'}
+                    strokeWidth={(isSelectedCoord(120, 310) || isSelectedCoord(70, 310)) ? '2.5' : '1.5'}
+                    style={{ transition: 'all 0.3s' }}
+                  />
+
+                  {/* Pines de Estaciones Meteorológicas colocados sobre los edificios */}
+                  {estaciones.map((est) => (
+                    <g
+                      key={est.id}
+                      className={`map-pin-group ${selectedStationId === est.id ? 'selected' : ''}`}
+                      onClick={() => setSelectedStationId(est.id)}
+                    >
+                      <circle cx={est.coordenadas.x} cy={est.coordenadas.y} r="12" className="map-pin-pulse" />
+                      <circle cx={est.coordenadas.x} cy={est.coordenadas.y} r="6" className="map-pin-core" />
+                    </g>
+                  ))}
+                </g>
               </svg>
 
-              {/* Panel Flotante de Información de la Estaci<n */}
+              {/* Panel Flotante de Información de la Estación */}
               {estacionSeleccionada && (
                 <div className="station-floating-panel">
                   <h4>{estacionSeleccionada.nombre}</h4>
@@ -458,17 +774,7 @@ export default function Analitica() {
                 </div>
               )}
 
-              {/* Leyenda del Mapa */}
-              <div className="map-legend">
-                <div className="map-legend-item">
-                  <span className="map-legend-dot" style={{ backgroundColor: '#0284c7' }}></span>
-                  <span>Estación Meteorológica</span>
-                </div>
-                <div className="map-legend-item">
-                  <span className="map-legend-dot" style={{ backgroundColor: '#16a34a' }}></span>
-                  <span>Estación Seleccionada</span>
-                </div>
-              </div>
+
             </div>
           </div>
 

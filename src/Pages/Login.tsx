@@ -28,35 +28,7 @@ export default function Login() {
     setCredenciales({ usuario: '', password: '' });
   };
 
-  const manejarOlvidoPassword = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    if (!credenciales.usuario.trim()) {
-      alert("Por favor, ingresa tu usuario en el campo de texto antes de solicitar el restablecimiento.");
-      return;
-    }
 
-    const usuarioSol = credenciales.usuario.trim();
-    const solicitudesPrevias = JSON.parse(localStorage.getItem('solicitudesReset') || '[]');
-    
-    // Evitar duplicidades de solicitudes pendientes
-    const existe = solicitudesPrevias.some((sol: any) => sol.usuario.toLowerCase() === usuarioSol.toLowerCase());
-    if (existe) {
-      setNotificacionToast(`Ya existe una solicitud pendiente de restablecimiento para el usuario "${usuarioSol}".`);
-      setTimeout(() => setNotificacionToast(null), 4000);
-      return;
-    }
-
-    const nuevaSolicitud = {
-      id: Date.now(),
-      usuario: usuarioSol,
-      rol: tipoAcceso,
-      fecha: new Date().toLocaleString()
-    };
-
-    localStorage.setItem('solicitudesReset', JSON.stringify([...solicitudesPrevias, nuevaSolicitud]));
-    setNotificacionToast(`¡Solicitud enviada! Se ha notificado al Administrador para restablecer la contraseña de "${usuarioSol}".`);
-    setTimeout(() => setNotificacionToast(null), 5000);
-  };
 
   const manejarEnvio = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +48,7 @@ export default function Login() {
       }
 
       // Acceso correcto como Administrador
-      localStorage.setItem('userRole', 'tecnico');
+      localStorage.setItem('userRole', 'admin');
       console.log("Iniciando sesión como Administrador (admin@inamhi.gob.ec)");
       setTimeout(() => {
         setIngresando(false);
@@ -91,11 +63,7 @@ export default function Login() {
 
     setTimeout(() => {
       setIngresando(false);
-      if (tipoAcceso === 'tecnico') {
-        navigate('/admin');
-      } else {
-        navigate('/inventario');
-      }
+      navigate('/inventario');
     }, 1200);
   };
 
@@ -233,7 +201,7 @@ export default function Login() {
             </div>
 
             <div className="form-actions">
-              <a href="#" className="forgot-password" onClick={manejarOlvidoPassword}>¿Olvidaste tu contraseña?</a>
+              <a href="#" className="forgot-password" onClick={(e) => { e.preventDefault(); navigate('/contra-usu'); }}>¿Olvidaste tu contraseña?</a>
             </div>
 
             <button type="submit" className="btn-liquid btn-login" disabled={ingresando}>

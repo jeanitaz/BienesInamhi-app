@@ -1,0 +1,201 @@
+/* --- CONTENEDOR BASE 404 --- */
+.notfound-container {
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #0b0f19 0%, #03070f 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Luces ambientales cálidas estilo lámpara de lava */
+.ambient-light {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 1;
+  opacity: 0.45;
+  animation: floatLight 15s infinite alternate ease-in-out;
+}
+.light-1 { width: 450px; height: 450px; background: #ff007f; top: 10%; left: 15%; }
+.light-2 { width: 400px; height: 400px; background: #bc13fe; bottom: 5%; right: 20%; animation-delay: -7s; }
+
+.centered-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+/* Tarjeta 404 */
+.notfound-card.liquid-glass {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.002));
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: none;
+  border-radius: 0px;
+  padding: 60px 40px;
+  width: 100%;
+  min-height: 100vh;
+  max-width: 100%;
+  box-shadow: none;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- LOGO 404 INTEGRADO CON LÁMPARA DE LAVA --- */
+.lava-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.lamp-number {
+  font-size: 14rem;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -4px;
+  text-shadow: 0 0 25px rgba(255, 0, 127, 0.35);
+  background: linear-gradient(to bottom, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Contenedor de la Lámpara de Lava */
+.lava-lamp-container {
+  width: 160px;
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 15px 35px rgba(188, 19, 254, 0.45));
+}
+
+.lava-lamp-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* --- ANIMACIONES DE LAS GOTAS DE LAVA (BLOBS) --- */
+@keyframes floatBlob1 {
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-115px) scale(0.9); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+@keyframes floatBlob2 {
+  0% { transform: translateY(0px) scale(1); }
+  60% { transform: translateY(-95px) scale(1.15); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+@keyframes floatBlob3 {
+  0% { transform: translateY(0px) scale(0.9); }
+  45% { transform: translateY(60px) scale(1.1); }
+  100% { transform: translateY(0px) scale(0.9); }
+}
+
+@keyframes floatBlob4 {
+  0% { transform: translateY(0px) scale(1); }
+  70% { transform: translateY(75px) scale(0.85); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+@keyframes floatBlob5 {
+  0% { transform: translateY(0px) scale(0.8); }
+  50% { transform: translateY(-55px) scale(1.2); }
+  100% { transform: translateY(0px) scale(0.8); }
+}
+
+.blob-1 { animation: floatBlob1 9s infinite ease-in-out; transform-origin: 60px 160px; }
+.blob-2 { animation: floatBlob2 11s infinite ease-in-out; transform-origin: 50px 150px; }
+.blob-3 { animation: floatBlob3 13s infinite ease-in-out; transform-origin: 70px 90px; }
+.blob-4 { animation: floatBlob4 8s infinite ease-in-out; transform-origin: 55px 65px; }
+.blob-5 { animation: floatBlob5 10s infinite ease-in-out; transform-origin: 65px 130px; }
+
+/* Títulos y subtítulos */
+.notfound-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 25px 0 12px 0;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.notfound-text {
+  color: rgba(224, 242, 254, 0.85);
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0 0 30px 0;
+  max-width: 600px;
+}
+
+/* Nota técnica de advertencia */
+.notfound-warning-box {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 14px 20px;
+  border-radius: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+.notfound-warning-box p {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+@keyframes floatLight {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(30px, -15px); }
+}
+
+/* Adaptación para celulares */
+@media (max-width: 576px) {
+  .notfound-card.liquid-glass {
+    padding: 20px 10px;
+  }
+
+  .lamp-number {
+    font-size: 8rem;
+  }
+
+  .lava-lamp-container {
+    width: 90px;
+    height: 165px;
+  }
+
+  .notfound-title {
+    font-size: 1.5rem;
+  }
+
+  .notfound-text {
+    font-size: 0.95rem;
+  }
+}

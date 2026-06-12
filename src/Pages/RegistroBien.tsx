@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import FondoNodos from '../components/FondoParticulas';
+import FondoClaro from '../components/FondoViento';
 import '../styles/RegistroBien.css';
 
 export default function RegistroBien() {
@@ -29,7 +29,7 @@ export default function RegistroBien() {
   const marcasGuardadas = getOpcionesUnicas('marca', ['Campbell Scientific', 'Davis Instruments', 'RM Young', 'Lufft', 'Panasonic', 'Kipp & Zonen', 'Rotronic', 'Vaisala', 'Sutron']);
   const modelosGuardados = getOpcionesUnicas('modelo', ['CR1000X', 'CR300', 'Vantage Pro2', 'Model 05103', 'Toughbook CF-33', 'Toughbook FZ-G2', 'HP2000', 'CMP11', 'HC2A-S', 'WXT536']);
   const coloresGuardados = getOpcionesUnicas('color', ['Gris', 'Negro', 'Blanco', 'Azul', 'Plata', 'Amarillo', 'Naranja']);
-  const materialesGuardados = getOpcionesUnicas('material', ['Aluminio Anodizado', 'Acero Inoxidable 316', 'Plástico ABS Reforzado', 'Vidrio Borosilicato', 'Fibra de Vidrio', 'Policarbonato']);
+  const materialesGuardados = ['Plástico', 'Metal', 'Madera'];
   const ubicacionesGuardadas = getOpcionesUnicas('ubicacion', ['Estación Iñaquito - Quito', 'Estación Izobamba', 'Estación Tababela', 'Estación Cotopaxi', 'Laboratorio de Calibración', 'Estación El Labrador', 'Bodega Central INAMHI']);
 
   const checkCustom = (val: string | undefined, list: string[]) => val ? !list.includes(val) : false;
@@ -52,24 +52,24 @@ export default function RegistroBien() {
   const [formData, setFormData] = useState({
     nombreBien: bienAEditar?.nombreBien || '',
     codigoEsbye: bienAEditar?.codigoEsbye || '',
-    codigoAnterior: '',
-    codigoProvisional: '',
+    codigoAnterior: bienAEditar?.codigoAnterior || '',
+    codigoProvisional: bienAEditar?.codigoProvisional || '',
     serie: bienAEditar?.serie || '',
     modelo: esModeloCustom ? 'Otro' : (bienAEditar?.modelo || ''),
     color: esColorCustom ? 'Otro' : (bienAEditar?.color || ''),
-    numActa: '',
+    numActa: bienAEditar?.numActa || '',
     estado: (bienAEditar?.estado || 'bueno') as 'bueno' | 'regular' | 'malo',
     material: esMaterialCustom ? 'Otro' : (bienAEditar?.material || ''),
     ubicacion: esUbicacionCustom ? 'Otro' : (bienAEditar?.ubicacion || ''),
     marca: esMarcaCustom ? 'Otro' : (bienAEditar?.marca || ''),
     custodio: esCustodioCustom ? 'Otro' : (bienAEditar?.custodio || ''),
-    observacion: ''
+    observacion: bienAEditar?.observacion || ''
   });
 
   // Marcadores de inexistencia de códigos
-  const [sinEsbye, setSinEsbye] = useState(bienAEditar?.codigoEsbye?.startsWith('SIN-') || false);
-  const [sinAnterior, setSinAnterior] = useState(false);
-  const [sinProvisional, setSinProvisional] = useState(false);
+  const [sinEsbye, setSinEsbye] = useState(bienAEditar?.codigoEsbye?.startsWith('SIN-') || bienAEditar?.codigoEsbye === 'SIN CÓDIGO' || false);
+  const [sinAnterior, setSinAnterior] = useState(bienAEditar?.codigoAnterior === 'SIN CÓDIGO' || false);
+  const [sinProvisional, setSinProvisional] = useState(bienAEditar?.codigoProvisional === 'SIN CÓDIGO' || false);
 
   // Expresión regular para validar formato del código provisional (e.g. TICS-GD-0000)
   const regexProvisional = /^[A-Z]{4}-[A-Z]{2}-\d{4}$/;
@@ -155,7 +155,11 @@ export default function RegistroBien() {
       material: formData.material === 'Otro' ? materialOtro.trim() : formData.material.trim(),
       custodio: formData.custodio === 'Otro' ? custodioOtro.trim() : formData.custodio.trim() || 'Sin Asignar',
       ubicacion: formData.ubicacion === 'Otro' ? ubicacionOtro.trim() : formData.ubicacion.trim() || 'Bodega Central',
-      estado: formData.estado
+      estado: formData.estado,
+      codigoAnterior: sinAnterior ? 'SIN CÓDIGO' : formData.codigoAnterior.trim(),
+      codigoProvisional: sinProvisional ? 'SIN CÓDIGO' : formData.codigoProvisional.trim(),
+      numActa: formData.numActa.trim() || 'S/A',
+      observacion: formData.observacion.trim()
     };
 
     try {
@@ -194,11 +198,9 @@ export default function RegistroBien() {
   };
 
   return (
-    <div className="registro-bien-container liquid-theme">
-      {/* Fondo de partículas cibernéticas y luces */}
-      <FondoNodos />
-      <div className="ambient-light light-1"></div>
-      <div className="ambient-light light-2"></div>
+    <div className="registro-bien-container light-theme">
+      {/* Fondo de partículas dinámico sutil y elegante en tono claro */}
+      <FondoClaro />
 
       <div className="centered-wrapper">
         <div className="registro-bien-card liquid-glass">
@@ -468,11 +470,11 @@ export default function RegistroBien() {
               <div className="input-group">
                 <label htmlFor="material">Material</label>
                 <select id="material" name="material" value={formData.material} onChange={manejarCambio} required disabled={cargando}>
-                  <option value="">-- Seleccionar --</option>
+                  <option value="">Seleccione...</option>
                   {materialesGuardados.map((m, idx) => (
                     <option key={idx} value={m}>{m}</option>
                   ))}
-                  <option value="Otro">Otro...</option>
+                  <option value="Otro">OTRO</option>
                 </select>
                 {formData.material === 'Otro' && (
                   <input
