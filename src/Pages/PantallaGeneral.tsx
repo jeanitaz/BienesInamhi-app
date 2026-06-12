@@ -58,6 +58,12 @@ export default function PantallaGeneral() {
     custodio: string;
     ubicacion: string;
     estado: string;
+    codigoAnterior: string;
+    codigoProvisional: string;
+    color: string;
+    material: string;
+    numActa: string;
+    observacion: string;
   }
 
   const initialFiltros: FiltrosAvanzadosType = {
@@ -69,6 +75,12 @@ export default function PantallaGeneral() {
     custodio: 'todos',
     ubicacion: 'todas',
     estado: 'todos',
+    codigoAnterior: '',
+    codigoProvisional: '',
+    color: 'todos',
+    material: 'todos',
+    numActa: '',
+    observacion: '',
   };
 
   const [filtrosAvanzados, setFiltrosAvanzados] = useState<FiltrosAvanzadosType>(initialFiltros);
@@ -301,30 +313,57 @@ export default function PantallaGeneral() {
           return;
         }
 
-        // Obtener la primera fila como nombres de columnas (headers)
-        const cabeceras = (filas[0] as string[]).map(c => String(c).toLowerCase().trim());
+        // Obtener la primera fila como nombres de columnas (headers) normalizados
+        const cabeceras = (filas[0] as string[]).map(c => 
+          String(c).toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        );
 
-        // Mapeador flexible de palabras clave
-        const buscarIndice = (palabrasClave: string[]): number => {
-          return cabeceras.findIndex(cabecera => 
-            palabrasClave.some(pc => cabecera.normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(pc))
-          );
+        // Mapeador con exclusiones y búsquedas exactas/parciales
+        const buscarIndice = (palabrasClave: string[], palabrasExcluidas: string[] = [], exacto = false): number => {
+          return cabeceras.findIndex(cabecera => {
+            const tieneExclusion = palabrasExcluidas.some(pe => cabecera.includes(pe));
+            if (tieneExclusion) return false;
+            
+            if (exacto) {
+              return palabrasClave.some(pc => cabecera === pc);
+            }
+            return palabrasClave.some(pc => cabecera.includes(pc));
+          });
         };
 
-        const idxEsbye = buscarIndice(['esbye', 'codigo', 'cod', 'identificador']);
-        const idxNombre = buscarIndice(['nombre', 'descripcion', 'bien', 'articulo', 'equipo']);
+        // 1. Nombre del Bien (prioriza 'nombre', 'descripcion' y excluye códigos/series)
+        const idxNombre = buscarIndice(
+          ['nombre', 'descripcion', 'bien', 'articulo', 'equipo'],
+          ['codigo', 'cod', 'anterior', 'provisional', 'serie', 'serial', 'sn']
+        );
+
+        // 2. Código ESBYE (prioriza 'esbye', 'codigo del bien', 'identificador')
+        // Si no se encuentra, busca cualquier columna que contenga 'codigo' y no sea anterior/provisional/temp
+        let idxEsbye = buscarIndice(['esbye', 'codigo del bien', 'codigo de bien', 'cod bien']);
+        if (idxEsbye === -1) {
+          idxEsbye = buscarIndice(['codigo', 'cod', 'identificador'], ['anterior', 'provisional', 'temp', 'ant', 'prov']);
+        }
+
+        // 3. Código Anterior
+        const idxCodigoAnterior = buscarIndice(['anterior', 'ant', 'previo', 'prev']);
+
+        // 4. Código Provisional (prioriza 'provisional', 'prov', 'temp', o si es exactamente 'codigo' o 'cod')
+        let idxCodigoProvisional = buscarIndice(['provisional', 'prov', 'temp']);
+        if (idxCodigoProvisional === -1) {
+          idxCodigoProvisional = buscarIndice(['codigo', 'cod'], ['bien', 'anterior', 'ant', 'esbye'], true);
+        }
+
+        // 5. Otros campos
         const idxMarca = buscarIndice(['marca', 'brand']);
         const idxModelo = buscarIndice(['modelo', 'model']);
         const idxSerie = buscarIndice(['serie', 'serial', 'sn']);
         const idxCustodio = buscarIndice(['custodio', 'responsable', 'usuario', 'empleado']);
-        const idxUbicacion = buscarIndice(['ubicacion', 'estacion', 'oficina', 'lugar']);
+        const idxUbicacion = buscarIndice(['ubicacion', 'estacion', 'oficina', 'lugar', 'id ubicacion']);
         const idxEstado = buscarIndice(['estado', 'status', 'condicion']);
-        const idxCodigoAnterior = buscarIndice(['anterior', 'ant', 'previo', 'prev']);
-        const idxCodigoProvisional = buscarIndice(['provisional', 'prov', 'temp']);
         const idxColor = buscarIndice(['color', 'tono']);
         const idxMaterial = buscarIndice(['material', 'compuesto']);
-        const idxActa = buscarIndice(['acta', 'numacta', 'numeroacta', 'documento']);
-        const idxObservacion = buscarIndice(['observacion', 'observaciones', 'nota', 'notas', 'detalle', 'detalles']);
+        const idxActa = buscarIndice(['acta', 'numacta', 'numeroacta', 'documento', 'n-acta']);
+        const idxObservacion = buscarIndice(['observacion', 'observaciones', 'nota', 'notas', 'detalle', 'detalles', 'omes']);
 
         if (idxNombre === -1) {
           alert('No pudimos identificar la columna para el "Nombre del Bien". Asegúrate de que tu Excel tenga un encabezado adecuado como "Nombre", "Descripción" o "Bien".');
@@ -462,6 +501,26 @@ export default function PantallaGeneral() {
     return Array.from(ubicacionesUnicas).sort();
   }, [bienes]);
 
+  const coloresDisponibles = useMemo(() => {
+    const coloresUnicos = new Set<string>();
+    bienes.forEach(b => {
+      if (b.color && b.color.trim()) {
+        coloresUnicos.add(b.color.trim());
+      }
+    });
+    return Array.from(coloresUnicos).sort();
+  }, [bienes]);
+
+  const materialesDisponibles = useMemo(() => {
+    const materialesUnicos = new Set<string>();
+    bienes.forEach(b => {
+      if (b.material && b.material.trim()) {
+        materialesUnicos.add(b.material.trim());
+      }
+    });
+    return Array.from(materialesUnicos).sort();
+  }, [bienes]);
+
   // Filtrado y búsqueda reactiva
   const bienesFiltrados = useMemo(() => {
     return bienes.filter((bien) => {
@@ -503,6 +562,24 @@ export default function PantallaGeneral() {
       const cumpleEstadoAvanzado = filtrosAplicados.estado === 'todos' || 
         bien.estado.toLowerCase() === filtrosAplicados.estado.toLowerCase();
 
+      const cumpleCodigoAnteriorAvanzado = !filtrosAplicados.codigoAnterior.trim() || 
+        (bien.codigoAnterior && bien.codigoAnterior.toLowerCase().includes(filtrosAplicados.codigoAnterior.toLowerCase().trim()));
+
+      const cumpleCodigoProvisionalAvanzado = !filtrosAplicados.codigoProvisional.trim() || 
+        (bien.codigoProvisional && bien.codigoProvisional.toLowerCase().includes(filtrosAplicados.codigoProvisional.toLowerCase().trim()));
+
+      const cumpleColorAvanzado = filtrosAplicados.color === 'todos' || 
+        (bien.color && bien.color.toLowerCase() === filtrosAplicados.color.toLowerCase());
+
+      const cumpleMaterialAvanzado = filtrosAplicados.material === 'todos' || 
+        (bien.material && bien.material.toLowerCase() === filtrosAplicados.material.toLowerCase());
+
+      const cumpleNumActaAvanzado = !filtrosAplicados.numActa.trim() || 
+        (bien.numActa && bien.numActa.toLowerCase().includes(filtrosAplicados.numActa.toLowerCase().trim()));
+
+      const cumpleObservacionAvanzado = !filtrosAplicados.observacion.trim() || 
+        (bien.observacion && bien.observacion.toLowerCase().includes(filtrosAplicados.observacion.toLowerCase().trim()));
+
       return cumpleBusqueda && 
         cumpleEstado && 
         cumpleCodigoAvanzado && 
@@ -512,7 +589,13 @@ export default function PantallaGeneral() {
         cumpleSerieAvanzado && 
         cumpleCustodioAvanzado && 
         cumpleUbicacionAvanzado && 
-        cumpleEstadoAvanzado;
+        cumpleEstadoAvanzado &&
+        cumpleCodigoAnteriorAvanzado &&
+        cumpleCodigoProvisionalAvanzado &&
+        cumpleColorAvanzado &&
+        cumpleMaterialAvanzado &&
+        cumpleNumActaAvanzado &&
+        cumpleObservacionAvanzado;
     });
   }, [bienes, searchTerm, filtroEstado, filtrosAplicados]);
 
@@ -1032,6 +1115,78 @@ export default function PantallaGeneral() {
                   <option value="regular">Regular</option>
                   <option value="malo">Malo</option>
                 </select>
+              </div>
+
+              {/* Código Anterior */}
+              <div className="modal-input-group">
+                <label>Código Anterior:</label>
+                <input 
+                  type="text" 
+                  placeholder="Filtrar por cód. anterior..." 
+                  value={filtrosAvanzados.codigoAnterior}
+                  onChange={(e) => setFiltrosAvanzados(prev => ({ ...prev, codigoAnterior: e.target.value }))}
+                />
+              </div>
+
+              {/* Código Provisional */}
+              <div className="modal-input-group">
+                <label>Código Provisional:</label>
+                <input 
+                  type="text" 
+                  placeholder="Filtrar por cód. provisional..." 
+                  value={filtrosAvanzados.codigoProvisional}
+                  onChange={(e) => setFiltrosAvanzados(prev => ({ ...prev, codigoProvisional: e.target.value }))}
+                />
+              </div>
+
+              {/* Color */}
+              <div className="modal-input-group">
+                <label>Color:</label>
+                <select 
+                  value={filtrosAvanzados.color}
+                  onChange={(e) => setFiltrosAvanzados(prev => ({ ...prev, color: e.target.value }))}
+                >
+                  <option value="todos">Todos</option>
+                  {coloresDisponibles.map(color => (
+                    <option key={color} value={color}>{color}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Material */}
+              <div className="modal-input-group">
+                <label>Material:</label>
+                <select 
+                  value={filtrosAvanzados.material}
+                  onChange={(e) => setFiltrosAvanzados(prev => ({ ...prev, material: e.target.value }))}
+                >
+                  <option value="todos">Todos</option>
+                  {materialesDisponibles.map(material => (
+                    <option key={material} value={material}>{material}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* N-Acta */}
+              <div className="modal-input-group">
+                <label>N-Acta:</label>
+                <input 
+                  type="text" 
+                  placeholder="Filtrar por acta..." 
+                  value={filtrosAvanzados.numActa}
+                  onChange={(e) => setFiltrosAvanzados(prev => ({ ...prev, numActa: e.target.value }))}
+                />
+              </div>
+
+              {/* Observación */}
+              <div className="modal-input-group">
+                <label>Observaciones:</label>
+                <input 
+                  type="text" 
+                  placeholder="Filtrar por observaciones..." 
+                  value={filtrosAvanzados.observacion}
+                  onChange={(e) => setFiltrosAvanzados(prev => ({ ...prev, observacion: e.target.value }))}
+                />
               </div>
             </div>
 

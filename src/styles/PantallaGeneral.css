@@ -784,6 +784,25 @@
   grid-template-columns: 1fr 1fr;
   column-gap: 24px;
   row-gap: 16px;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+/* Custom scrollbar for premium aesthetic */
+.modal-body-grid::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-body-grid::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+.modal-body-grid::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.modal-body-grid::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .modal-input-group {
